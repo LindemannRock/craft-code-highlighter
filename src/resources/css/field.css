@@ -1,0 +1,41 @@
+/* Code Highlighter Field Styles */
+
+/* Override Craft CP styles for code editor */
+.prism-syntax-highlighter code {
+    box-shadow: none !important;
+    display: block;
+    overflow: visible;
+}
+
+/* Override Craft's token styling (conflicts with Prism tokens) */
+/* Note: Craft has its own .token class that conflicts with Prism's syntax tokens */
+.prism-syntax-highlighter .token {
+    display: inline;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    font-size: inherit;
+    line-height: inherit;
+    text-shadow: none;
+    background: transparent;
+    box-shadow: none;
+    /* DO NOT set color: inherit - let Prism theme colors apply! */
+}
+
+/* Add padding for line numbers */
+pre[class*="language-"].line-numbers,
+.prism-syntax-highlighter.line-numbers {
+    padding-left: 3.8em;
+}
+
+/* Ensure pre has line-numbers class for proper styling */
+pre.line-numbers {
+    position: relative;
+    padding-left: 3.8em;
+    counter-reset: linenumber;
+}
+
+pre.line-numbers > code {
+    position: relative;
+    white-space: inherit;
+}

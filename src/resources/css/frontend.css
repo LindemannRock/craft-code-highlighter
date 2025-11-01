@@ -1,0 +1,122 @@
+/**
+ * Code Highlighter Frontend Styles
+ *
+ * Customizable via CSS variables with fallback pattern
+ * Short names (--copy-btn-*) fallback to prefixed names (--code-highlighter-copy-btn-*)
+ *
+ * @author LindemannRock
+ * @copyright Copyright (c) 2025 LindemannRock
+ */
+
+:root {
+	/* Code Block Typography */
+	--code-highlighter-font-size: var(--code-font-size, 14px);
+	--code-highlighter-font-family: var(--code-font-family, monospace);
+
+	/* Copy Button Colors */
+	--code-highlighter-copy-btn-bg: var(--copy-btn-bg, #2d2d2d);
+	--code-highlighter-copy-btn-color: var(--copy-btn-color, #ffffff);
+	--code-highlighter-copy-btn-hover-bg: var(--copy-btn-hover-bg, #3d3d3d);
+	--code-highlighter-copy-btn-success-bg: var(--copy-btn-success-bg, #28a745);
+	--code-highlighter-copy-btn-border-color: var(--copy-btn-border-color, transparent);
+
+	/* Copy Button Spacing */
+	--code-highlighter-copy-btn-padding-inline: var(--copy-btn-padding-inline, 0.5rem);
+	--code-highlighter-copy-btn-padding-block: var(--copy-btn-padding-block, 0.25rem);
+	--code-highlighter-copy-btn-border-radius: var(--copy-btn-border-radius, 0.25rem);
+	--code-highlighter-copy-btn-min-width: var(--copy-btn-min-width, 5rem);
+
+	/* Copy Button Typography */
+	--code-highlighter-copy-btn-font-size: var(--copy-btn-font-size, 0.75rem);
+	--code-highlighter-copy-btn-font-family: var(--copy-btn-font-family, inherit);
+
+	/* Copy Button Focus (a11y) */
+	--code-highlighter-copy-btn-focus-color: var(--copy-btn-focus-color, #4a9eff);
+	--code-highlighter-copy-btn-focus-offset: var(--copy-btn-focus-offset, 2px);
+
+	/* Toolbar Position & Opacity */
+	--code-highlighter-toolbar-top: var(--toolbar-top, 0.3em);
+	--code-highlighter-toolbar-right: var(--toolbar-right, 0.2em);
+	--code-highlighter-toolbar-opacity: var(--toolbar-opacity, 0.9);
+}
+
+/* Copy Button - Base Styling (Proper <button> element) */
+.code-copy-button {
+	background: var(--code-highlighter-copy-btn-bg) !important;
+	color: var(--code-highlighter-copy-btn-color) !important;
+	padding-inline: var(--code-highlighter-copy-btn-padding-inline) !important;
+	padding-block: var(--code-highlighter-copy-btn-padding-block) !important;
+	min-width: var(--code-highlighter-copy-btn-min-width) !important;
+	font-size: var(--code-highlighter-copy-btn-font-size) !important;
+	font-family: var(--code-highlighter-copy-btn-font-family) !important;
+	border: 1px solid var(--code-highlighter-copy-btn-border-color) !important;
+	border-radius: var(--code-highlighter-copy-btn-border-radius) !important;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+/* Hover State */
+.code-copy-button:hover {
+	background: var(--code-highlighter-copy-btn-hover-bg) !important;
+}
+
+/* Focus State (Accessibility - keyboard navigation) */
+.code-copy-button:focus {
+	outline: 2px solid var(--code-highlighter-copy-btn-focus-color);
+	outline-offset: var(--code-highlighter-copy-btn-focus-offset);
+}
+
+/* Focus Visible (modern browsers) */
+.code-copy-button:focus-visible {
+	outline: 2px solid var(--code-highlighter-copy-btn-focus-color);
+	outline-offset: var(--code-highlighter-copy-btn-focus-offset);
+}
+
+/* Success State (after copying) */
+.code-copy-button[data-copy-state='copy-success'] {
+	background: var(--code-highlighter-copy-btn-success-bg);
+}
+
+/* Error State */
+.code-copy-button[data-copy-state='copy-error'] {
+	background: #dc2626;
+	color: #ffffff;
+}
+
+/* Toolbar Positioning */
+.code-highlighter-wrapper div.code-toolbar > .toolbar {
+	top: var(--code-highlighter-toolbar-top) !important;
+	right: var(--code-highlighter-toolbar-right) !important;
+	opacity: var(--code-highlighter-toolbar-opacity);
+	transition: opacity 0.2s ease;
+}
+
+.code-highlighter-wrapper div.code-toolbar > .toolbar:hover {
+	opacity: 1;
+}
+
+/* Ensure wrapper doesn't break layout */
+.code-highlighter-wrapper {
+	position: relative;
+}
+
+/* Code Block - Apply typography variables */
+.code-highlighter-wrapper pre[class*="language-"],
+.code-highlighter-wrapper pre[class*="language-"] code {
+	font-size: var(--code-highlighter-font-size);
+	font-family: var(--code-highlighter-font-family);
+}
+
+/* Word Wrap - Enable wrapping for long lines */
+.code-highlighter-wrapper pre.wrap-lines,
+.code-highlighter-wrapper pre.wrap-lines code {
+	white-space: pre-wrap;
+	word-wrap: break-word;
+	word-break: normal;
+}
+
+/* Hide copy button when no-copy class is present */
+.code-highlighter-wrapper.no-copy .code-toolbar > .toolbar {
+	display: none;
+}

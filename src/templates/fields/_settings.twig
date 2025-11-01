@@ -1,0 +1,176 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.selectField({
+    label: 'Default Language'|t('code-highlighter'),
+    instructions: 'Default language for this field (must be enabled in Available Languages below)'|t('code-highlighter'),
+    id: 'language',
+    name: 'language',
+    value: field.language,
+    options: [{value: '', label: 'Use Plugin Default (' ~ settings.defaultLanguage|upper ~ ')'}]|merge(field.getAvailableLanguagesForField()),
+    errors: field.getErrors('language'),
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Show Line Numbers'|t('code-highlighter'),
+    instructions: 'Show line numbers in the field editor and frontend output'|t('code-highlighter'),
+    id: 'lineNumbers',
+    name: 'lineNumbers',
+    on: field.lineNumbers,
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Enable Word Wrap'|t('code-highlighter'),
+    instructions: 'Wrap long lines instead of horizontal scrolling. Note: May affect code readability and line number alignment - use with caution.'|t('code-highlighter'),
+    id: 'wordWrap',
+    name: 'wordWrap',
+    on: field.wordWrap,
+}) }}
+
+{{ forms.textField({
+    label: 'Field Rows'|t('code-highlighter'),
+    instructions: 'Number of visible rows in the field editor (1 row = 21px)'|t('code-highlighter'),
+    id: 'editorRows',
+    name: 'editorRows',
+    value: field.editorRows,
+    type: 'number',
+    min: 1,
+    max: 50,
+    size: 5,
+    errors: field.getErrors('editorRows'),
+}) }}
+
+{{ forms.textField({
+    label: 'Field Tab Width'|t('code-highlighter'),
+    instructions: 'Number of spaces per tab character in field editor'|t('code-highlighter'),
+    id: 'tabWidth',
+    name: 'tabWidth',
+    value: field.tabWidth,
+    type: 'number',
+    min: 1,
+    max: 8,
+    size: 5,
+    errors: field.getErrors('tabWidth'),
+}) }}
+
+{{ forms.selectField({
+    label: 'Field Font Size'|t('code-highlighter'),
+    instructions: 'Font size for field editor'|t('code-highlighter'),
+    id: 'fontSize',
+    name: 'fontSize',
+    value: field.fontSize,
+    options: [
+        { value: 0, label: 'Use Plugin Default (' ~ settings.defaultFontSize ~ 'px)' },
+        { value: 8, label: '8px - Tiny' },
+        { value: 10, label: '10px - Very Small' },
+        { value: 12, label: '12px - Small' },
+        { value: 14, label: '14px - Normal' },
+        { value: 16, label: '16px - Medium' },
+        { value: 18, label: '18px - Large' },
+        { value: 20, label: '20px - Very Large' },
+        { value: 24, label: '24px - Huge' },
+    ],
+    errors: field.getErrors('fontSize'),
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Show Language Dropdown'|t('code-highlighter'),
+    instructions: 'Show language switcher dropdown in the editor'|t('code-highlighter'),
+    id: 'showLanguageDropdown',
+    name: 'showLanguageDropdown',
+    on: field.showLanguageDropdown,
+}) }}
+
+{{ forms.textareaField({
+    label: 'Default Value'|t('code-highlighter'),
+    instructions: 'Default code to populate the field with (optional)'|t('code-highlighter'),
+    id: 'defaultValue',
+    name: 'defaultValue',
+    value: field.defaultValue,
+    rows: 4,
+    class: 'code',
+}) }}
+
+
+<hr>
+
+{% set fieldDefaultLang = field.getEffectiveLanguage() %}
+{% set fieldAvailableLangs = field.availableLanguages %}
+
+{# For display only - if empty, show plugin defaults as visual hint #}
+{% set displayValues = fieldAvailableLangs %}
+{% if displayValues is empty %}
+	{% set displayValues = settings.availableLanguages %}
+{% endif %}
+
+{# Ensure field's default language is shown as checked #}
+{% if fieldDefaultLang and fieldDefaultLang not in displayValues %}
+	{% set displayValues = displayValues|merge([fieldDefaultLang]) %}
+{% endif %}
+
+<div class="field">
+	<div class="heading">
+		<label>{{ 'Available Languages (Optional)'|t('code-highlighter') }}</label>
+	</div>
+
+	<div class="input ltr">
+		<a class="fieldtoggle" data-target="fieldAvailableLanguagesListWrapper" tabindex="0">{{ 'Override available languages for this field (leave empty to use plugin defaults)'|t('code-highlighter') }}</a>
+
+		<div id="fieldAvailableLanguagesListWrapper" class="hidden">
+			{{ forms.checkboxSelect({
+				id: 'availableLanguages',
+				name: 'availableLanguages',
+				values: fieldAvailableLangs,
+				options: settings.getFilteredLanguages(),
+				showAllOption: true,
+			}) }}
+		</div>
+	</div>
+</div>
+
+{% js %}
+// Protect the field's default language checkbox
+(function() {
+	var fieldDefaultLang = '{{ fieldDefaultLang|e('js') }}';
+	if (!fieldDefaultLang) return;
+
+	var $wrapper = $('#fieldAvailableLanguagesListWrapper');
+
+	// Wait for Craft's checkbox field to initialize
+	setTimeout(function() {
+		var $defaultCheckbox = $wrapper.find('input[value="' + fieldDefaultLang + '"]');
+
+		if ($defaultCheckbox.length) {
+			console.log('Protecting field default language:', fieldDefaultLang);
+
+			// Add label and styling
+			$defaultCheckbox
+				.parent('label')
+				.attr('title', '{{ 'Field default language (always included)'|t('code-highlighter')|e('js') }}')
+				.find('span:first')
+				.append(' <span class="info">{{ '(field default)'|t('code-highlighter')|e('js') }}</span>');
+
+			// Prevent unchecking with immediate re-check
+			$defaultCheckbox.on('change', function() {
+				console.log('Default checkbox change detected, checked:', this.checked);
+				if (!this.checked) {
+					console.log('Re-checking default language');
+					setTimeout(function() {
+						$defaultCheckbox.prop('checked', true);
+					}, 1);
+				}
+			});
+
+			// Handle Select All button
+			$wrapper.find('.select-all').on('change', function() {
+				console.log('Select all clicked');
+				setTimeout(function() {
+					$defaultCheckbox.prop('checked', true);
+				}, 10);
+			});
+
+			// Ensure it's checked now
+			$defaultCheckbox.prop('checked', true);
+		}
+	}, 100);
+})();
+{% endjs %}

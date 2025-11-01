@@ -1,0 +1,175 @@
+{% extends "_layouts/cp" %}
+{% set title = "Code Highlighter Settings"|t('code-highlighter') %}
+{% set fullPageForm = true %}
+
+{% import "_includes/forms" as forms %}
+
+{% block content %}
+	{{ actionInput('plugins/save-plugin-settings') }}
+	{{ hiddenInput('pluginHandle', 'code-highlighter') }}
+	{{ redirectInput('code-highlighter/settings') }}
+
+	<h2>{{ "General"|t('code-highlighter') }}</h2>
+
+	{{ forms.textField({
+        label: "Plugin Name"|t('code-highlighter'),
+        instructions: "The name of the plugin as it appears in the Control Panel menu"|t('code-highlighter'),
+        id: 'pluginName',
+        name: 'settings[pluginName]',
+        value: settings.pluginName,
+        required: true,
+        disabled: settings.isOverriddenByConfig('pluginName'),
+        warning: settings.isOverriddenByConfig('pluginName') ?
+            "This is being overridden by the <code>pluginName</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+    }) }}
+
+	{{ forms.selectField({
+        label: 'Theme'|t('code-highlighter'),
+        instructions: 'Prism theme for syntax highlighting (can be overridden per page using craft.codeHighlighter.setTheme())'|t('code-highlighter'),
+        id: 'defaultTheme',
+        name: 'settings[defaultTheme]',
+        value: settings.defaultTheme,
+        options: settings.getAvailableThemes(),
+        disabled: settings.isOverriddenByConfig('defaultTheme'),
+        warning: settings.isOverriddenByConfig('defaultTheme') ?
+            "This is being overridden by the <code>defaultTheme</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+    }) }}
+
+	{{ forms.selectField({
+        label: 'Default Language'|t('code-highlighter'),
+        instructions: 'Default language for new Code Highlighter fields'|t('code-highlighter'),
+        id: 'defaultLanguage',
+        name: 'settings[defaultLanguage]',
+        value: settings.defaultLanguage,
+        options: settings.getAllPrismLanguages(),
+        disabled: settings.isOverriddenByConfig('defaultLanguage'),
+        warning: settings.isOverriddenByConfig('defaultLanguage') ?
+            "This is being overridden by the <code>defaultLanguage</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+    }) }}
+
+	{{ forms.selectField({
+        label: 'Default Font Size'|t('code-highlighter'),
+        instructions: 'Default font size for new Code Highlighter fields'|t('code-highlighter'),
+        id: 'defaultFontSize',
+        name: 'settings[defaultFontSize]',
+        value: settings.defaultFontSize,
+        options: [
+            { value: 8, label: '8px - Tiny' },
+            { value: 10, label: '10px - Very Small' },
+            { value: 12, label: '12px - Small' },
+            { value: 14, label: '14px - Normal' },
+            { value: 16, label: '16px - Medium' },
+            { value: 18, label: '18px - Large' },
+            { value: 20, label: '20px - Very Large' },
+            { value: 24, label: '24px - Huge' },
+        ],
+        disabled: settings.isOverriddenByConfig('defaultFontSize'),
+        warning: settings.isOverriddenByConfig('defaultFontSize') ?
+            "This is being overridden by the <code>defaultFontSize</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+        errors: settings.getErrors('defaultFontSize'),
+    }) }}
+
+	{{ forms.textField({
+        label: 'Font Family (Optional)'|t('code-highlighter'),
+        instructions: 'Custom font family for code blocks (leave empty to use theme default)'|t('code-highlighter'),
+        id: 'fontFamily',
+        name: 'settings[fontFamily]',
+        value: settings.fontFamily,
+        placeholder: 'e.g., JetBrains Mono, Fira Code, monospace',
+        disabled: settings.isOverriddenByConfig('fontFamily'),
+        warning: settings.isOverriddenByConfig('fontFamily') ?
+            "This is being overridden by the <code>fontFamily</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+        errors: settings.getErrors('fontFamily'),
+    }) }}
+
+	{{ forms.lightswitchField({
+        label: 'Enable Copy Button'|t('code-highlighter'),
+        instructions: 'Add "Copy" button to frontend code blocks by default (can be overridden per block via render options)'|t('code-highlighter'),
+        id: 'enableCopyButton',
+        name: 'settings[enableCopyButton]',
+        on: settings.enableCopyButton,
+        disabled: settings.isOverriddenByConfig('enableCopyButton'),
+        warning: settings.isOverriddenByConfig('enableCopyButton') ?
+            "This is being overridden by the <code>enableCopyButton</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+    }) }}
+
+	{% set defaultLang = settings.defaultLanguage %}
+	{% set currentValues = settings.availableLanguages %}
+
+	{# Ensure default language is always included #}
+	{% if defaultLang and defaultLang not in currentValues %}
+		{% set currentValues = currentValues|merge([defaultLang]) %}
+	{% endif %}
+
+
+	<hr>
+
+	<div class="field">
+		<div class="heading">
+			<label>{{ 'Available Languages'|t('code-highlighter') }}</label>
+		</div>
+
+		{% if settings.isOverriddenByConfig('availableLanguages') %}
+			<p class="warning">{{ "This is being overridden by the <code>availableLanguages</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw }}</p>
+		{% endif %}
+
+		{% if settings.getErrors('availableLanguages') %}
+			<ul class="errors">
+				{% for error in settings.getErrors('availableLanguages') %}
+					<li>{{ error }}</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+
+
+		<div class="input ltr">
+			<a class="fieldtoggle" data-target="availableLanguagesListWrapper" tabindex="0">{{ 'Select languages available in field settings dropdowns'|t('code-highlighter') }}</a>
+
+
+			<div id="availableLanguagesListWrapper" class="hidden">
+				{{ forms.checkboxSelectField({
+					id: 'availableLanguages',
+					name: 'settings[availableLanguages]',
+					values: currentValues,
+					options: settings.getAllPrismLanguages(),
+					showAllOption: true,
+					disabled: settings.isOverriddenByConfig('availableLanguages'),
+				}) }}
+			</div>
+		</div>
+	</div>
+
+	{% js %}
+	// Protect the default language checkbox
+	(function() {
+		var defaultLang = '{{ defaultLang|e('js') }}';
+		if (defaultLang) {
+			var $defaultCheckbox = $('#availableLanguagesListWrapper input[value="' + defaultLang + '"]');
+
+			// Add label and styling
+			$defaultCheckbox
+				.parent('label')
+				.attr('title', '{{ 'Default language (always included)'|t('code-highlighter')|e('js') }}')
+				.append(' <span class="info">{{ '(default)'|t('code-highlighter')|e('js') }}</span>');
+
+			// Override any attempt to uncheck it
+			$defaultCheckbox.on('click', function(e) {
+				if (!this.checked) {
+					e.preventDefault();
+					this.checked = true;
+					return false;
+				}
+			});
+
+			// Ensure it's always checked
+			$defaultCheckbox.prop('checked', true);
+		}
+	})();
+	{% endjs %}
+
+	<div class="buttons">
+		<button type="submit" class="btn submit">{{ "Save Settings"|t('code-highlighter') }}</button>
+	</div>
+
+	{% include 'code-highlighter/_components/plugin-credit.twig' %}
+{% endblock %}
