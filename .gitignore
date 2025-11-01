@@ -1,0 +1,7 @@
+# Dependencies
+/node_modules/
+package-lock.json
+
+# Build artifacts are committed (for composer installs without npm)
+# src/resources/css/*.min.css
+# src/resources/js/*.min.js
