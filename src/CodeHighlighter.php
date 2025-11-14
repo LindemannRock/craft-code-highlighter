@@ -63,6 +63,9 @@ class CodeHighlighter extends Plugin
         // Register Twig extension
         Craft::$app->view->registerTwigExtension(new CodeHighlighterTwigExtension());
 
+        // Register plugin name helper extension
+        Craft::$app->view->registerTwigExtension(new \lindemannrock\codehighlighter\twigextensions\PluginNameExtension());
+
         // Register Twig variable
         Event::on(
             CraftVariable::class,

@@ -1,6 +1,11 @@
 {% extends "_layouts/cp" %}
-{% set title = "Code Highlighter Settings"|t('code-highlighter') %}
+{% set title = "{pluginName} Settings"|t('code-highlighter', {pluginName: codeHelper.fullName}) %}
 {% set fullPageForm = true %}
+
+{% set crumbs = [
+    { label: codeHelper.fullName|t('code-highlighter'), url: url('code-highlighter/settings') },
+    { label: 'Settings'|t('code-highlighter'), url: url('code-highlighter/settings') },
+] %}
 
 {% import "_includes/forms" as forms %}
 
