@@ -16,16 +16,24 @@ use craft\base\Model;
  */
 class Settings extends Model
 {
-    // General
+    /**
+     * @var string Plugin display name
+     */
     public string $pluginName = 'Code Highlighter';
 
-    // Theme
+    /**
+     * @var string Default Prism theme handle
+     */
     public string $defaultTheme = 'tomorrow';
 
-    // Language (default for new fields)
+    /**
+     * @var string Default language for new fields
+     */
     public string $defaultLanguage = 'php';
 
-    // Available Languages (which languages to show in dropdowns)
+    /**
+     * @var array Languages available in field dropdowns
+     */
     public array $availableLanguages = [
         'markup', 'css', 'clike', 'javascript',
         'php', 'bash', 'twig', 'yaml', 'json'
@@ -41,8 +49,14 @@ class Settings extends Model
      */
     public string $fontFamily = '';
 
-    // Frontend Features
+    /**
+     * @var bool Show copy-to-clipboard button
+     */
     public bool $enableCopyButton = true;
+
+    /**
+     * @var array Custom styles for the copy button
+     */
     public array $copyButtonStyles = [];
 
     /**
@@ -345,4 +359,3 @@ class Settings extends Model
         return strtolower($this->getPluralDisplayName());
     }
 }
-
