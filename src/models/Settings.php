@@ -31,11 +31,15 @@ class Settings extends Model
         'php', 'bash', 'twig', 'yaml', 'json'
     ];
 
-    // Editor Font Size (default for new fields)
-    public int $defaultFontSize = 14; // pixels
+    /**
+     * @var int Editor font size in pixels (default for new fields)
+     */
+    public int $defaultFontSize = 14;
 
-    // Frontend Typography (optional - leave empty to use theme defaults)
-    public string $fontFamily = ''; // e.g., 'JetBrains Mono, monospace'
+    /**
+     * @var string Frontend typography (optional - leave empty to use theme defaults, e.g., 'JetBrains Mono, monospace')
+     */
+    public string $fontFamily = '';
 
     // Frontend Features
     public bool $enableCopyButton = true;

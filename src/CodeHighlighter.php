@@ -43,7 +43,11 @@ class CodeHighlighter extends Plugin
     public static ?CodeHighlighter $plugin = null;
     public string $schemaVersion = '1.0.0';
     public bool $hasCpSettings = true;
-    public bool $hasCpSection = false; // No CP section needed
+
+    /**
+     * @var bool No CP section needed
+     */
+    public bool $hasCpSection = false;
 
     public static function config(): array
     {

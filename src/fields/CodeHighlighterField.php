@@ -30,16 +30,50 @@ use yii\db\Schema;
  */
 class CodeHighlighterField extends Field
 {
-    // Properties
-    public string $language = ''; // Empty = use default from settings
-    public array $availableLanguages = []; // Empty = use plugin settings
-    public bool $showLanguageDropdown = false; // Show language switcher in editor
+    /**
+     * @var string Language (empty = use default from settings)
+     */
+    public string $language = '';
+
+    /**
+     * @var array Available languages (empty = use plugin settings)
+     */
+    public array $availableLanguages = [];
+
+    /**
+     * @var bool Show language switcher in editor
+     */
+    public bool $showLanguageDropdown = false;
+
+    /**
+     * @var bool Enable line numbers
+     */
     public bool $lineNumbers = true;
-    public bool $wordWrap = false; // Enable word wrapping for long lines
-    public int $editorRows = 10; // Number of rows (each row = 21px)
-    public int $tabWidth = 4; // Tab width in spaces
-    public int $fontSize = 0; // Font size in pixels (0 = use default from settings)
-    public string $defaultValue = ''; // Default code to populate field
+
+    /**
+     * @var bool Enable word wrapping for long lines
+     */
+    public bool $wordWrap = false;
+
+    /**
+     * @var int Number of rows (each row = 21px)
+     */
+    public int $editorRows = 10;
+
+    /**
+     * @var int Tab width in spaces
+     */
+    public int $tabWidth = 4;
+
+    /**
+     * @var int Font size in pixels (0 = use default from settings)
+     */
+    public int $fontSize = 0;
+
+    /**
+     * @var string Default code to populate field
+     */
+    public string $defaultValue = '';
 
     /**
      * Backward compatibility setter
