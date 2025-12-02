@@ -114,4 +114,3 @@ class PrismService extends Component
         return $settings->getAllPrismLanguages();
     }
 }
-

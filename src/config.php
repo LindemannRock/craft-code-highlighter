@@ -32,7 +32,7 @@ return [
         // Available Languages (which languages appear in field settings)
         'availableLanguages' => [
             'markup', 'css', 'clike', 'javascript',
-            'php', 'bash', 'twig', 'yaml', 'json'
+            'php', 'bash', 'twig', 'yaml', 'json',
         ],
 
 

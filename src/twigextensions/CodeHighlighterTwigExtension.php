@@ -8,7 +8,6 @@
 
 namespace lindemannrock\codehighlighter\twigextensions;
 
-use Craft;
 use lindemannrock\codehighlighter\CodeHighlighter;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;

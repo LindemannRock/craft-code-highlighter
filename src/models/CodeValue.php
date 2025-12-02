@@ -8,9 +8,8 @@
 
 namespace lindemannrock\codehighlighter\models;
 
-use Craft;
-use lindemannrock\codehighlighter\CodeHighlighter;
 use craft\helpers\Template;
+use lindemannrock\codehighlighter\CodeHighlighter;
 use Twig\Markup;
 
 /**

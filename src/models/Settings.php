@@ -36,7 +36,7 @@ class Settings extends Model
      */
     public array $availableLanguages = [
         'markup', 'css', 'clike', 'javascript',
-        'php', 'bash', 'twig', 'yaml', 'json'
+        'php', 'bash', 'twig', 'yaml', 'json',
     ];
 
     /**

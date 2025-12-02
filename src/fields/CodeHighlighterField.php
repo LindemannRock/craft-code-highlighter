@@ -12,10 +12,9 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\helpers\Html;
-use craft\helpers\Template;
-use lindemannrock\codehighlighter\CodeHighlighter;
 use lindemannrock\codehighlighter\assetbundles\FieldAsset;
 use lindemannrock\codehighlighter\assetbundles\LanguageAsset;
+use lindemannrock\codehighlighter\CodeHighlighter;
 use lindemannrock\codehighlighter\models\CodeValue;
 use yii\db\Schema;
 

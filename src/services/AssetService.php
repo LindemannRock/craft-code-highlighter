@@ -10,9 +10,9 @@ namespace lindemannrock\codehighlighter\services;
 
 use Craft;
 use craft\base\Component;
-use lindemannrock\codehighlighter\CodeHighlighter;
 use lindemannrock\codehighlighter\assetbundles\FrontendAsset;
 use lindemannrock\codehighlighter\assetbundles\FrontendLanguageAsset;
+use lindemannrock\codehighlighter\CodeHighlighter;
 use lindemannrock\codehighlighter\variables\CodeHighlighterVariable;
 
 /**

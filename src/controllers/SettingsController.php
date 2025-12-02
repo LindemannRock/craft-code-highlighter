@@ -8,7 +8,6 @@
 
 namespace lindemannrock\codehighlighter\controllers;
 
-use Craft;
 use craft\web\Controller;
 use lindemannrock\codehighlighter\CodeHighlighter;
 use yii\web\Response;
