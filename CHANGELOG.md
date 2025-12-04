@@ -1,5 +1,19 @@
 # Changelog
 
+## [5.2.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.1.0...v5.2.0) (2025-12-04)
+
+
+### Features
+
+* add PHPDoc comments for class properties in CodeHighlighter and Settings models ([febc095](https://github.com/LindemannRock/craft-code-highlighter/commit/febc095f692417e5acb6c1e6ba75523e83f78381))
+* add PHPDoc comments for properties in CodeHighlighter and Settings models ([cdba036](https://github.com/LindemannRock/craft-code-highlighter/commit/cdba03699a90f234be186178e1667085024f8263))
+* add PHPStan and EasyCodingStandard configurations, update dependencies, and refactor code structure ([22ea3e3](https://github.com/LindemannRock/craft-code-highlighter/commit/22ea3e3246cc08e61ae3860e5791c90001d0c232))
+
+
+### Miscellaneous Chores
+
+* update [@since](https://github.com/since) annotations to 5.0.0 for various classes and files ([31ab13e](https://github.com/LindemannRock/craft-code-highlighter/commit/31ab13eae910596f63066781d2d7e3faa0854924))
+
 ## [5.1.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.0.0...v5.1.0) (2025-11-14)
 
 
