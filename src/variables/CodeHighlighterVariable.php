@@ -14,6 +14,8 @@ use lindemannrock\codehighlighter\CodeHighlighter;
  * Code Highlighter Variable
  *
  * Provides template variables for controlling code highlighting
+ *
+ * @since 5.0.0
  */
 class CodeHighlighterVariable
 {

@@ -14,6 +14,8 @@ use craft\web\AssetBundle;
  * Language Asset Bundle
  *
  * Separate bundle for Prism language components
+ *
+ * @since 5.0.0
  */
 class LanguageAsset extends AssetBundle
 {

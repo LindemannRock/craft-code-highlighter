@@ -17,6 +17,8 @@ use lindemannrock\codehighlighter\CodeHighlighter;
  * Field Asset Bundle
  *
  * Asset bundle for the Code Highlighter field in the Control Panel
+ *
+ * @since 5.0.0
  */
 class FieldAsset extends AssetBundle
 {

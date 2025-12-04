@@ -16,6 +16,8 @@ use lindemannrock\codehighlighter\CodeHighlighter;
  * Prism Service
  *
  * Handles code highlighting using Prism.js
+ *
+ * @since 5.0.0
  */
 class PrismService extends Component
 {

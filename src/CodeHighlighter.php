@@ -31,7 +31,7 @@ use yii\base\Event;
  *
  * @author    LindemannRock
  * @package   CodeHighlighter
- * @since     1.0.0
+ * @since     5.0.0
  *
  * @property-read PrismService $prism
  * @property-read AssetService $assets

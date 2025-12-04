@@ -14,6 +14,8 @@ use Twig\TwigFilter;
 
 /**
  * Twig Extension for Code Highlighting
+ *
+ * @since 5.0.0
  */
 class CodeHighlighterTwigExtension extends AbstractExtension
 {

@@ -14,6 +14,8 @@ use craft\web\AssetBundle;
  * Frontend Language Asset Bundle
  *
  * Asset bundle for Prism language components on frontend
+ *
+ * @since 5.0.0
  */
 class FrontendLanguageAsset extends AssetBundle
 {

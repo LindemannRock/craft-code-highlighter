@@ -16,6 +16,8 @@ use lindemannrock\codehighlighter\CodeHighlighter;
  * Frontend Asset Bundle
  *
  * Asset bundle for Prism.js on the frontend
+ *
+ * @since 5.0.0
  */
 class FrontendAsset extends AssetBundle
 {

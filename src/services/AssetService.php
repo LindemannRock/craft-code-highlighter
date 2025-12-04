@@ -19,6 +19,8 @@ use lindemannrock\codehighlighter\variables\CodeHighlighterVariable;
  * Asset Service
  *
  * Handles smart loading of Prism.js assets
+ *
+ * @since 5.0.0
  */
 class AssetService extends Component
 {

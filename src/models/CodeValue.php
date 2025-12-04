@@ -17,6 +17,8 @@ use Twig\Markup;
  *
  * Stores code and language, auto-highlights when output
  * Extends Twig Markup to prevent HTML escaping
+ *
+ * @since 5.0.0
  */
 class CodeValue extends Markup
 {

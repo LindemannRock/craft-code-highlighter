@@ -5,6 +5,8 @@
  * Configuration file for Code Highlighter plugin
  *
  * Copy to config/code-highlighter.php to override default settings
+ *
+ * @since 5.0.0
  */
 
 return [

@@ -14,6 +14,8 @@ use yii\web\Response;
 
 /**
  * Settings Controller
+ *
+ * @since 5.0.0
  */
 class SettingsController extends Controller
 {

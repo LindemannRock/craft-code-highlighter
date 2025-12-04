@@ -13,6 +13,8 @@ use craft\base\Model;
 
 /**
  * Code Highlighter Settings Model
+ *
+ * @since 5.0.0
  */
 class Settings extends Model
 {
