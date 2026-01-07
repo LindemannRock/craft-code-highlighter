@@ -1,5 +1,12 @@
 # Changelog
 
+## [5.3.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.2.0...v5.3.0) (2026-01-07)
+
+
+### Features
+
+* migrate to shared base plugin ([04deede](https://github.com/LindemannRock/craft-code-highlighter/commit/04deede37753a9ea661f93875fef2f30b5c96b12))
+
 ## [5.2.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.1.0...v5.2.0) (2025-12-04)
 
 
