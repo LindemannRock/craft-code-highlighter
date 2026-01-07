@@ -1,58 +1,60 @@
 {
-    "name": "lindemannrock/craft-code-highlighter",
-    "description": "Lightweight syntax highlighting for Craft CMS using Prism.js",
-    "type": "craft-plugin",
-    "version": "5.2.0",
-    "keywords": [
-        "craft",
-        "cms",
-        "craftcms",
-        "craft-plugin",
-        "prism",
-        "syntax-highlighting",
-        "code-highlighting",
-        "prism.js"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Bilal Hary Lindemann",
-            "email": "bh@lindemannrock.com",
-            "homepage": "https://lindemannrock.com",
-            "role": "Developer"
-        }
-    ],
-    "support": {
-        "email": "support@lindemannrock.com",
-        "issues": "https://github.com/LindemannRock/craft-code-highlighter/issues",
-        "source": "https://github.com/LindemannRock/craft-code-highlighter",
-        "docs": "https://github.com/LindemannRock/craft-code-highlighter/blob/main/README.md",
-        "rss": "https://github.com/LindemannRock/craft-code-highlighter/commits/main.atom"
-    },
-    "require": {
-        "php": "^8.2",
-        "craftcms/cms": "^5.0.0"
-    },
-    "require-dev": {
-        "craftcms/phpstan": "dev-main"
-    },
-    "autoload": {
-        "psr-4": {
-            "lindemannrock\\codehighlighter\\": "src/"
-        }
-    },
-    "scripts": {
-        "phpstan": "phpstan --ansi --memory-limit=1G",
-        "check-cs": "ecs check --ansi",
-        "fix-cs": "ecs check --fix --ansi"
-    },
-    "extra": {
-        "name": "Code Highlighter",
-        "handle": "code-highlighter",
-        "developer": "LindemannRock",
-        "developerUrl": "https://lindemannrock.com",
-        "documentationUrl": "https://github.com/LindemannRock/craft-code-highlighter/blob/main/README.md",
-        "changelogUrl": "https://github.com/LindemannRock/craft-code-highlighter/blob/main/CHANGELOG.md",
-        "class": "lindemannrock\\codehighlighter\\CodeHighlighter"
-    }
+	"name": "lindemannrock/craft-code-highlighter",
+	"description": "Lightweight syntax highlighting for Craft CMS using Prism.js",
+	"type": "craft-plugin",
+	"version": "5.2.0",
+	"keywords": [
+		"craft",
+		"cms",
+		"craftcms",
+		"craft-plugin",
+		"prism",
+		"syntax-highlighting",
+		"code-highlighting",
+		"prism.js"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Bilal Hary Lindemann",
+			"email": "bh@lindemannrock.com",
+			"homepage": "https://lindemannrock.com",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"email": "support@lindemannrock.com",
+		"issues": "https://github.com/LindemannRock/craft-code-highlighter/issues",
+		"source": "https://github.com/LindemannRock/craft-code-highlighter",
+		"docs": "https://github.com/LindemannRock/craft-code-highlighter/blob/main/README.md",
+		"rss": "https://github.com/LindemannRock/craft-code-highlighter/commits/main.atom"
+	},
+	"require": {
+		"php": "^8.2",
+		"craftcms/cms": "^5.0.0",
+		"lindemannrock/craft-plugin-base": "^5.0"
+	},
+	"require-dev": {
+		"craftcms/ecs": "dev-main",
+		"craftcms/phpstan": "dev-main"
+	},
+	"autoload": {
+		"psr-4": {
+			"lindemannrock\\codehighlighter\\": "src/"
+		}
+	},
+	"scripts": {
+		"phpstan": "phpstan --ansi --memory-limit=1G",
+		"check-cs": "ecs check --ansi",
+		"fix-cs": "ecs check --fix --ansi"
+	},
+	"extra": {
+		"name": "Code Highlighter",
+		"handle": "code-highlighter",
+		"developer": "LindemannRock",
+		"developerUrl": "https://lindemannrock.com",
+		"documentationUrl": "https://github.com/LindemannRock/craft-code-highlighter/blob/main/README.md",
+		"changelogUrl": "https://github.com/LindemannRock/craft-code-highlighter/blob/main/CHANGELOG.md",
+		"class": "lindemannrock\\codehighlighter\\CodeHighlighter"
+	}
 }

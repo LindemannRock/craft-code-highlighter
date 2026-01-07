@@ -10,6 +10,8 @@ namespace lindemannrock\codehighlighter\models;
 
 use Craft;
 use craft\base\Model;
+use lindemannrock\base\traits\SettingsConfigTrait;
+use lindemannrock\base\traits\SettingsDisplayNameTrait;
 
 /**
  * Code Highlighter Settings Model
@@ -18,6 +20,8 @@ use craft\base\Model;
  */
 class Settings extends Model
 {
+    use SettingsConfigTrait;
+    use SettingsDisplayNameTrait;
     /**
      * @var string Plugin display name
      */
@@ -142,15 +146,11 @@ class Settings extends Model
     }
 
     /**
-     * Check if a setting is overridden in config file
-     *
-     * @param string $setting
-     * @return bool
+     * Plugin handle for config file resolution
      */
-    public function isOverriddenByConfig(string $setting): bool
+    protected static function pluginHandle(): string
     {
-        $configFileSettings = Craft::$app->getConfig()->getConfigFromFile('code-highlighter');
-        return isset($configFileSettings[$setting]);
+        return 'code-highlighter';
     }
 
     /**
@@ -332,32 +332,5 @@ class Settings extends Model
         }
 
         return $filtered;
-    }
-
-    public function getDisplayName(): string
-    {
-        $name = str_replace([' Manager', ' manager'], '', $this->pluginName);
-        $singular = preg_replace('/s$/', '', $name) ?: $name;
-        return $singular;
-    }
-
-    public function getFullName(): string
-    {
-        return $this->pluginName;
-    }
-
-    public function getPluralDisplayName(): string
-    {
-        return str_replace([' Manager', ' manager'], '', $this->pluginName);
-    }
-
-    public function getLowerDisplayName(): string
-    {
-        return strtolower($this->getDisplayName());
-    }
-
-    public function getPluralLowerDisplayName(): string
-    {
-        return strtolower($this->getPluralDisplayName());
     }
 }

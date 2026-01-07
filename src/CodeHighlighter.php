@@ -18,6 +18,7 @@ use craft\events\RegisterUrlRulesEvent;
 use craft\services\Fields;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
+use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\codehighlighter\fields\CodeHighlighterField;
 use lindemannrock\codehighlighter\models\Settings;
 use lindemannrock\codehighlighter\services\AssetService;
@@ -74,6 +75,9 @@ class CodeHighlighter extends Plugin
     {
         parent::init();
         self::$plugin = $this;
+
+        // Bootstrap the base plugin helper
+        PluginHelper::bootstrap($this, 'codeHighlighterHelper');
 
         // Register Twig extension
         Craft::$app->view->registerTwigExtension(new CodeHighlighterTwigExtension());
