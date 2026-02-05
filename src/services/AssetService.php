@@ -99,7 +99,7 @@ class AssetService extends Component
             // Register theme CSS
             $view->registerCssFile(
                 $bundle->baseUrl . "/css/themes/prism-{$theme}{$themeExtension}",
-                ['depends' => FrontendAsset::class]
+                ['depends' => [FrontendAsset::class]]
             );
 
             $this->loadedThemes[] = $theme;
