@@ -1,5 +1,17 @@
 # Changelog
 
+## [5.3.1](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.3.0...v5.3.1) (2026-02-05)
+
+
+### Bug Fixes
+
+* **AssetService:** correct dependency registration for theme CSS ([bb11256](https://github.com/LindemannRock/craft-code-highlighter/commit/bb1125654008259ff047b8518a240e49a3940f14))
+
+
+### Miscellaneous Chores
+
+* **package.json:** update package name and add author ([d7de6ef](https://github.com/LindemannRock/craft-code-highlighter/commit/d7de6ef9728f865697496c9ccd0b69198b346175))
+
 ## [5.3.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.2.0...v5.3.0) (2026-01-07)
 
 
