@@ -12,10 +12,10 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\helpers\Html;
-use lindemannrock\codehighlighter\assetbundles\FieldAsset;
-use lindemannrock\codehighlighter\assetbundles\LanguageAsset;
 use lindemannrock\codehighlighter\CodeHighlighter;
 use lindemannrock\codehighlighter\models\CodeValue;
+use lindemannrock\codehighlighter\web\assets\field\FieldAsset;
+use lindemannrock\codehighlighter\web\assets\field\LanguageAsset;
 use yii\db\Schema;
 
 /**
@@ -329,7 +329,7 @@ class CodeHighlighterField extends Field
 
         // Load components.json once
         if ($componentsData === null) {
-            $componentsPath = Craft::getAlias('@lindemannrock/codehighlighter/resources/js/components.json');
+            $componentsPath = Craft::getAlias('@lindemannrock/codehighlighter/web/assets/prism/js/components.json');
             if (file_exists($componentsPath)) {
                 $componentsData = json_decode(file_get_contents($componentsPath), true);
             } else {

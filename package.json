@@ -4,8 +4,8 @@
   "description": "Lightweight syntax highlighting for Craft CMS using Prism.js",
   "scripts": {
     "minify": "npm run minify:css && npm run minify:js",
-    "minify:css": "cleancss -o src/resources/css/frontend.min.css src/resources/css/frontend.css && cleancss -o src/resources/css/field.min.css src/resources/css/field.css",
-    "minify:js": "terser src/resources/js/field.js -o src/resources/js/field.min.js -c -m && terser src/resources/js/copy-button.js -o src/resources/js/copy-button.min.js -c -m"
+    "minify:css": "cleancss -o src/web/assets/frontend/css/frontend.min.css src/web/assets/frontend/css/frontend.css && cleancss -o src/web/assets/field/css/field.min.css src/web/assets/field/css/field.css",
+    "minify:js": "terser src/web/assets/field/js/field.js -o src/web/assets/field/js/field.min.js -c -m && terser src/web/assets/frontend/js/copy-button.js -o src/web/assets/frontend/js/copy-button.min.js -c -m"
   },
   "devDependencies": {
     "clean-css-cli": "^5.6.3",

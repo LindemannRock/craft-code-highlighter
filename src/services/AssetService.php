@@ -10,10 +10,11 @@ namespace lindemannrock\codehighlighter\services;
 
 use Craft;
 use craft\base\Component;
-use lindemannrock\codehighlighter\assetbundles\FrontendAsset;
-use lindemannrock\codehighlighter\assetbundles\FrontendLanguageAsset;
 use lindemannrock\codehighlighter\CodeHighlighter;
 use lindemannrock\codehighlighter\variables\CodeHighlighterVariable;
+use lindemannrock\codehighlighter\web\assets\frontend\FrontendAsset;
+use lindemannrock\codehighlighter\web\assets\frontend\FrontendLanguageAsset;
+use lindemannrock\codehighlighter\web\assets\prism\PrismAsset;
 
 /**
  * Asset Service
@@ -84,7 +85,7 @@ class AssetService extends Component
     protected function registerTheme(array $options): void
     {
         $view = Craft::$app->getView();
-        $bundle = Craft::$app->getView()->getAssetManager()->getBundle(FrontendAsset::class);
+        $prismBundle = Craft::$app->getView()->getAssetManager()->getBundle(PrismAsset::class);
 
         // Get page theme from Variable (set via craft.codeHighlighter.setTheme())
         $variable = new CodeHighlighterVariable();
@@ -96,10 +97,10 @@ class AssetService extends Component
             $coreThemes = ['default', 'dark', 'funky', 'okaidia', 'twilight', 'coy', 'solarizedlight', 'tomorrow'];
             $themeExtension = in_array($theme, $coreThemes) ? '.min.css' : '.css';
 
-            // Register theme CSS
+            // Register theme CSS from PrismAsset (themes live in the shared prism bundle)
             $view->registerCssFile(
-                $bundle->baseUrl . "/css/themes/prism-{$theme}{$themeExtension}",
-                ['depends' => [FrontendAsset::class]]
+                $prismBundle->baseUrl . "/css/themes/prism-{$theme}{$themeExtension}",
+                ['depends' => [PrismAsset::class]]
             );
 
             $this->loadedThemes[] = $theme;
@@ -148,7 +149,7 @@ class AssetService extends Component
 
         // Load components.json once
         if ($componentsData === null) {
-            $componentsPath = Craft::getAlias('@lindemannrock/codehighlighter/resources/js/components.json');
+            $componentsPath = Craft::getAlias('@lindemannrock/codehighlighter/web/assets/prism/js/components.json');
             if (file_exists($componentsPath)) {
                 $componentsData = json_decode(file_get_contents($componentsPath), true);
             } else {

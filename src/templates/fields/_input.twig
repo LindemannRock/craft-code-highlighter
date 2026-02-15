@@ -71,7 +71,7 @@ $('#{{ namespacedId }}-field').codeHighlighterField();
     if ($selector.length && $code.length) {
         // Track loaded languages (base languages + field default)
         var loadedLanguages = ['clike', 'markup', 'javascript', 'json', '{{ effectiveLanguage }}'];
-        var assetBaseUrl = '{{ view.assetManager.getPublishedUrl('@lindemannrock/codehighlighter/resources', true) }}';
+        var assetBaseUrl = '{{ view.assetManager.getPublishedUrl('@lindemannrock/codehighlighter/web/assets/prism', true) }}';
 
         $selector.on('change', function() {
             var newLang = $(this).val();
