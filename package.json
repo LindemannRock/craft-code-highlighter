@@ -21,5 +21,8 @@
     "name": "LindemannRock",
     "url": "https://lindemannrock.com"
   },
-  "license": "Proprietary"
+  "license": "Proprietary",
+  "dependencies": {
+    "prismjs": "^1.29.0"
+  }
 }
