@@ -24,18 +24,29 @@ class CodeValue extends Markup
 {
     public string $code;
     public string $language;
-    public bool $lineNumbers;
+    public ?bool $lineNumbers;
     public bool $wordWrap;
+    public ?bool $showCopy;
+    public ?bool $matchBraces;
 
-    public function __construct(string $code, string $language, bool $lineNumbers = true, bool $wordWrap = false)
-    {
+    public function __construct(
+        string $code,
+        string $language,
+        ?bool $lineNumbers = null,
+        bool $wordWrap = false,
+        ?bool $showCopy = null,
+        ?bool $matchBraces = null,
+    ) {
         $this->code = $code;
         $this->language = $language;
         $this->lineNumbers = $lineNumbers;
         $this->wordWrap = $wordWrap;
+        $this->showCopy = $showCopy;
+        $this->matchBraces = $matchBraces;
 
-        // Initialize parent Markup with empty content (will be generated on __toString)
-        parent::__construct('', 'UTF-8');
+        // Pass raw code to parent so count()/jsonSerialize() return correct values.
+        // __toString() is overridden to return highlighted HTML instead.
+        parent::__construct($code, 'UTF-8');
     }
 
     /**
@@ -47,10 +58,22 @@ class CodeValue extends Markup
             return '';
         }
 
-        $html = CodeHighlighter::$plugin->prism->highlight($this->code, $this->language, [
-            'lineNumbers' => $this->lineNumbers,
+        $options = [
             'wordWrap' => $this->wordWrap,
-        ]);
+        ];
+
+        // Only pass nullable options when explicitly set (null = use plugin default)
+        if ($this->lineNumbers !== null) {
+            $options['lineNumbers'] = $this->lineNumbers;
+        }
+        if ($this->showCopy !== null) {
+            $options['showCopy'] = $this->showCopy;
+        }
+        if ($this->matchBraces !== null) {
+            $options['matchBraces'] = $this->matchBraces;
+        }
+
+        $html = CodeHighlighter::$plugin->prism->highlight($this->code, $this->language, $options);
 
         // Return raw HTML (won't be escaped because we extend Markup)
         return $html;
@@ -84,10 +107,18 @@ class CodeValue extends Markup
             return Template::raw('');
         }
 
-        // Build base options from field settings
-        $baseOptions = [
-            'lineNumbers' => $this->lineNumbers,
-        ];
+        // Build base options from field settings (null = use plugin default)
+        $baseOptions = [];
+
+        if ($this->lineNumbers !== null) {
+            $baseOptions['lineNumbers'] = $this->lineNumbers;
+        }
+        if ($this->showCopy !== null) {
+            $baseOptions['showCopy'] = $this->showCopy;
+        }
+        if ($this->matchBraces !== null) {
+            $baseOptions['matchBraces'] = $this->matchBraces;
+        }
 
         // Merge with provided options (provided options take precedence)
         $mergedOptions = array_merge($baseOptions, $options);

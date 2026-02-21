@@ -19,6 +19,13 @@ use yii\web\Response;
  */
 class SettingsController extends Controller
 {
+    public function beforeAction($action): bool
+    {
+        $this->requireAdmin();
+
+        return parent::beforeAction($action);
+    }
+
     public function actionIndex(): Response
     {
         return $this->actionGeneral();

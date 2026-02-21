@@ -1,8 +1,5 @@
-{% import "_includes/forms" as forms %}
-
 {% set editorHeight = field.getEditorHeight() %}
-{% set effectiveLanguage = field.getEffectiveLanguage() %}
-{% set languageClass = 'language-' ~ effectiveLanguage %}
+{% set languageClass = 'language-' ~ activeLanguage %}
 {% set settings = craft.app.plugins.getPlugin('code-highlighter').settings %}
 {% set theme = settings.defaultTheme %}
 {% set tabWidth = field.tabWidth %}
@@ -15,7 +12,7 @@
             <label for="{{ id }}-lang-switch">{{ 'Language'|t('code-highlighter') }}</label>
             <select id="{{ id }}-lang-switch" class="code-lang-switcher" data-field-id="{{ namespacedId }}">
                 {% for langKey, langLabel in availableLanguages %}
-                    <option value="{{ langKey }}" {% if langKey == effectiveLanguage %}selected{% endif %}>
+                    <option value="{{ langKey }}" {% if langKey == activeLanguage %}selected{% endif %}>
                         {{ langLabel }}
                     </option>
                 {% endfor %}
@@ -23,106 +20,66 @@
         </div>
     {% endif %}
 
-    <pre spellcheck="false" style="min-height: {{ editorHeight }}px; font-size: {{ fontSize }}px; {{ field.wordWrap ? 'white-space: pre-wrap; word-wrap: break-word;' : '' }}" class="code-editor prism-syntax-highlighter {{ field.lineNumbers ? 'line-numbers' : '' }}"><code style="tab-size: {{ tabWidth }}; -moz-tab-size: {{ tabWidth }}; min-height: {{ editorHeight }}px; font-size: {{ fontSize }}px;" class="{{ languageClass }} {{ field.lineNumbers ? 'line-numbers' : '' }}" contenteditable>{% if value | length %}{{ value }}{% endif %}</code></pre>
+    {% set effectiveLineNumbers = field.getEffectiveLineNumbers() %}
+    <pre spellcheck="false" style="min-height: {{ editorHeight }}px; font-size: {{ fontSize }}px; {{ field.wordWrap ? 'white-space: pre-wrap; word-wrap: break-word;' : '' }}" class="code-editor prism-syntax-highlighter {{ effectiveLineNumbers ? 'line-numbers' : '' }}"><code style="tab-size: {{ tabWidth }}; -moz-tab-size: {{ tabWidth }}; min-height: {{ editorHeight }}px; font-size: {{ fontSize }}px;" class="{{ languageClass }} {{ effectiveLineNumbers ? 'line-numbers' : '' }}" contenteditable>{% if value | length %}{{ value }}{% endif %}</code></pre>
 
-    <div class="hidden">
-        {{ forms.textareaField({
-            class: 'code-textarea',
-            id: namespacedId ~ '-code',
-            name: name ~ '[code]',
-            value: value,
-        }) }}
-
-        {% if field.showLanguageDropdown %}
-            {{ forms.textField({
-                id: namespacedId ~ '-language',
-                name: name ~ '[language]',
-                value: effectiveLanguage,
-                class: 'code-language-input',
-            }) }}
-        {% endif %}
-    </div>
+    <textarea name="{{ name }}[code]" class="code-textarea" style="display:none">{{ value }}</textarea>
+    <input type="hidden" name="{{ name }}[language]" value="{{ activeLanguage }}" class="code-lang-value">
 </div>
 
 {% js %}
 // Initialize Code Highlighter field
-$('#{{ namespacedId }}-field').codeHighlighterField();
+initCodeHighlighterField(document.getElementById('{{ namespacedId }}-field'));
 
 {% if field.showLanguageDropdown %}
 // Handle language switcher
 (function() {
-    console.log('IDs:', {
-        id: '{{ id }}',
-        namespacedId: '{{ namespacedId }}',
-        lookingFor: '{{ id }}-lang-switch'
-    });
+    var fieldEl = document.getElementById('{{ namespacedId }}-field');
+    var selector = fieldEl.querySelector('.code-lang-switcher');
+    var codeEl = fieldEl.querySelector('code');
+    var preEl = fieldEl.querySelector('pre');
 
-    var $selector = $('.code-lang-switcher');
-    var $field = $('#{{ namespacedId }}-field');
-    var $code = $field.find('code');
-    var $pre = $field.find('pre');
-
-    console.log('Language switcher found:', {
-        selector: $selector.length,
-        code: $code.length,
-        actualSelectorId: $selector.attr('id')
-    });
-
-    if ($selector.length && $code.length) {
+    if (selector && codeEl) {
         // Track loaded languages (base languages + field default)
-        var loadedLanguages = ['clike', 'markup', 'javascript', 'json', '{{ effectiveLanguage }}'];
+        var loadedLanguages = ['clike', 'markup', 'javascript', 'json', '{{ activeLanguage }}'];
         var assetBaseUrl = '{{ view.assetManager.getPublishedUrl('@lindemannrock/codehighlighter/web/assets/prism', true) }}';
 
-        $selector.on('change', function() {
-            var newLang = $(this).val();
-            var element = $code[0];
-
-            console.log('Switching to language:', newLang);
+        selector.addEventListener('change', function() {
+            var newLang = this.value;
 
             // Function to apply language change after component is loaded
             function applyLanguageChange() {
-                var currentCode = bililiteRange(element).text();
-
                 // Update classes
-                $code.attr('class', 'language-' + newLang + ' line-numbers');
-                $pre.attr('class', 'code-editor prism-syntax-highlighter line-numbers language-' + newLang);
+                var lineNumbersClass = {{ effectiveLineNumbers ? "'line-numbers'" : "''" }};
+                codeEl.className = 'language-' + newLang + (lineNumbersClass ? ' ' + lineNumbersClass : '');
+                preEl.className = 'code-editor prism-syntax-highlighter ' + (lineNumbersClass ? lineNumbersClass + ' ' : '') + 'language-' + newLang;
 
                 // Update hidden language input (for saving)
-                var $langInput = $('#{{ namespacedId }}-language');
-                if ($langInput.length) {
-                    $langInput.val(newLang);
-                    $langInput.trigger('change'); // Trigger autosave
+                var langInput = fieldEl.querySelector('.code-lang-value');
+                if (langInput) {
+                    langInput.value = newLang;
+                    langInput.dispatchEvent(new Event('change', { bubbles: true }));
                 }
-
-                console.log('Classes updated, language saved:', newLang, 're-highlighting...');
 
                 // Re-highlight
                 if (typeof Prism !== 'undefined') {
-                    Prism.highlightElement(element);
-                    console.log('Prism.highlightElement called for:', newLang);
+                    Prism.highlightElement(codeEl);
                 }
             }
 
             // Check if language component is loaded
             if (loadedLanguages.indexOf(newLang) === -1) {
-                console.log('Loading language component:', newLang);
                 var script = document.createElement('script');
                 script.src = assetBaseUrl + '/js/components/prism-' + newLang + '.min.js';
                 script.onload = function() {
-                    console.log('Component loaded:', newLang);
                     loadedLanguages.push(newLang);
                     applyLanguageChange();
-                };
-                script.onerror = function() {
-                    console.error('Failed to load component:', newLang);
                 };
                 document.head.appendChild(script);
             } else {
                 applyLanguageChange();
             }
         });
-    } else {
-        console.warn('Language selector or code element not found');
     }
 })();
 {% endif %}

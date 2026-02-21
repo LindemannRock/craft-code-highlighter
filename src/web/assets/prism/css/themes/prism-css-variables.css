@@ -1,0 +1,125 @@
+/**
+ * Prism CSS Variables Theme
+ *
+ * A Prism theme that uses CSS custom properties for all colors,
+ * enabling dynamic theming (e.g., light/dark mode, branded palettes).
+ *
+ * Override any --code-* variable on an ancestor element to customize.
+ * Defaults match the "Tomorrow Night" palette.
+ *
+ * @author LindemannRock
+ * @copyright Copyright (c) 2026 LindemannRock
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: var(--code-fg, #ccc);
+	background: none;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"] {
+	padding: 1em;
+	margin: 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: var(--code-bg, #2d2d2d);
+}
+
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.block-comment,
+.token.cdata,
+.token.comment,
+.token.doctype,
+.token.prolog {
+	color: var(--code-comment, #999);
+}
+
+.token.punctuation {
+	color: var(--code-punctuation, #ccc);
+}
+
+.token.attr-name,
+.token.deleted,
+.token.namespace,
+.token.tag {
+	color: var(--code-tag, #e2777a);
+}
+
+.token.function-name {
+	color: var(--code-function, #6196cc);
+}
+
+.token.boolean,
+.token.function,
+.token.number {
+	color: var(--code-number, #f08d49);
+}
+
+.token.class-name,
+.token.constant,
+.token.property,
+.token.symbol {
+	color: var(--code-class-name, #f8c555);
+}
+
+.token.atrule,
+.token.builtin,
+.token.important,
+.token.keyword,
+.token.selector {
+	color: var(--code-keyword, #cc99cd);
+}
+
+.token.attr-value,
+.token.char,
+.token.regex,
+.token.string,
+.token.variable {
+	color: var(--code-string, #7ec699);
+}
+
+.token.entity,
+.token.operator,
+.token.url {
+	color: var(--code-operator, #67cdcc);
+}
+
+.token.bold,
+.token.important {
+	font-weight: 700;
+}
+
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+
+.token.inserted {
+	color: var(--code-inserted, green);
+}

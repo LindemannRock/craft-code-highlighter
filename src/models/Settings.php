@@ -56,9 +56,25 @@ class Settings extends Model
     public string $fontFamily = '';
 
     /**
+     * @var bool Show line numbers by default
+     * @since 5.4.0
+     */
+    public bool $enableLineNumbers = true;
+
+    /**
      * @var bool Show copy-to-clipboard button
      */
     public bool $enableCopyButton = true;
+
+    /**
+     * @var bool Highlight matching braces/brackets
+     */
+    public bool $enableMatchBraces = false;
+
+    /**
+     * @var bool Show inline color previews for CSS color values
+     */
+    public bool $enableInlineColor = false;
 
     /**
      * @var array Custom styles for the copy button
@@ -70,11 +86,6 @@ class Settings extends Model
      */
     public function __set($name, $value)
     {
-        // Backward compatibility: enableLineNumbers (removed)
-        if ($name === 'enableLineNumbers') {
-            return;
-        }
-
         // Backward compatibility: autoFormat (removed)
         if ($name === 'autoFormat') {
             return;
@@ -92,14 +103,9 @@ class Settings extends Model
             return false;
         }
 
-        Craft::info('Settings beforeValidate - availableLanguages: ' . json_encode($this->availableLanguages), 'code-highlighter');
-
         // Handle Craft's "Select All" value for availableLanguages
         if (is_array($this->availableLanguages) && in_array('*', $this->availableLanguages)) {
-            Craft::info('Found * in availableLanguages, expanding to all languages', 'code-highlighter');
-            // Replace '*' with all available languages
             $this->availableLanguages = array_keys($this->getAllPrismLanguages());
-            Craft::info('Expanded to: ' . json_encode($this->availableLanguages), 'code-highlighter');
         }
 
         return true;
@@ -112,7 +118,7 @@ class Settings extends Model
             [['pluginName', 'defaultLanguage', 'fontFamily'], 'string', 'max' => 255],
             [['defaultTheme'], 'in', 'range' => array_keys($this->getAvailableThemes())],
             [['defaultLanguage'], 'in', 'range' => array_keys($this->getAllPrismLanguages())],
-            [['enableCopyButton'], 'boolean'],
+            [['enableLineNumbers', 'enableCopyButton', 'enableMatchBraces', 'enableInlineColor'], 'boolean'],
             [['availableLanguages'], 'safe'],
             [['availableLanguages'], 'validateAvailableLanguages'],
             [['defaultFontSize'], 'integer', 'min' => 8, 'max' => 32],
@@ -186,6 +192,9 @@ class Settings extends Model
             'gruvbox-light' => 'Gruvbox Light',
             'coldark-cold' => 'Coldark Cold',
             'coldark-dark' => 'Coldark Dark',
+
+            // CSS Variable Theme (for dynamic theming via --token-* custom properties)
+            'css-variables' => 'CSS Variables',
         ];
     }
 

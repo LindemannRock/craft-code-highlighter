@@ -1,5 +1,7 @@
 {% import "_includes/forms" as forms %}
 
+<h3>{{ 'Language'|t('code-highlighter') }}</h3>
+
 {{ forms.selectField({
     label: 'Default Language'|t('code-highlighter'),
     instructions: 'Default language for this field (must be enabled in Available Languages below)'|t('code-highlighter'),
@@ -11,23 +13,18 @@
 }) }}
 
 {{ forms.lightswitchField({
-    label: 'Show Line Numbers'|t('code-highlighter'),
-    instructions: 'Show line numbers in the field editor and frontend output'|t('code-highlighter'),
-    id: 'lineNumbers',
-    name: 'lineNumbers',
-    on: field.lineNumbers,
+    label: 'Show Language Dropdown'|t('code-highlighter'),
+    instructions: 'Show language switcher dropdown in the editor'|t('code-highlighter'),
+    id: 'showLanguageDropdown',
+    name: 'showLanguageDropdown',
+    on: field.showLanguageDropdown,
 }) }}
 
-{{ forms.lightswitchField({
-    label: 'Enable Word Wrap'|t('code-highlighter'),
-    instructions: 'Wrap long lines instead of horizontal scrolling. Note: May affect code readability and line number alignment - use with caution.'|t('code-highlighter'),
-    id: 'wordWrap',
-    name: 'wordWrap',
-    on: field.wordWrap,
-}) }}
+<hr>
+<h3>{{ 'Editor'|t('code-highlighter') }}</h3>
 
 {{ forms.textField({
-    label: 'Field Rows'|t('code-highlighter'),
+    label: 'Rows'|t('code-highlighter'),
     instructions: 'Number of visible rows in the field editor (1 row = 21px)'|t('code-highlighter'),
     id: 'editorRows',
     name: 'editorRows',
@@ -40,8 +37,8 @@
 }) }}
 
 {{ forms.textField({
-    label: 'Field Tab Width'|t('code-highlighter'),
-    instructions: 'Number of spaces per tab character in field editor'|t('code-highlighter'),
+    label: 'Tab Width'|t('code-highlighter'),
+    instructions: 'Number of spaces per tab character'|t('code-highlighter'),
     id: 'tabWidth',
     name: 'tabWidth',
     value: field.tabWidth,
@@ -53,8 +50,8 @@
 }) }}
 
 {{ forms.selectField({
-    label: 'Field Font Size'|t('code-highlighter'),
-    instructions: 'Font size for field editor'|t('code-highlighter'),
+    label: 'Font Size'|t('code-highlighter'),
+    instructions: 'Font size for the field editor'|t('code-highlighter'),
     id: 'fontSize',
     name: 'fontSize',
     value: field.fontSize,
@@ -73,12 +70,57 @@
 }) }}
 
 {{ forms.lightswitchField({
-    label: 'Show Language Dropdown'|t('code-highlighter'),
-    instructions: 'Show language switcher dropdown in the editor'|t('code-highlighter'),
-    id: 'showLanguageDropdown',
-    name: 'showLanguageDropdown',
-    on: field.showLanguageDropdown,
+    label: 'Word Wrap'|t('code-highlighter'),
+    instructions: 'Wrap long lines instead of horizontal scrolling. May affect code readability and line number alignment.'|t('code-highlighter'),
+    id: 'wordWrap',
+    name: 'wordWrap',
+    on: field.wordWrap,
 }) }}
+
+<hr>
+<h3>{{ 'Frontend Output'|t('code-highlighter') }}</h3>
+
+{{ forms.selectField({
+    label: 'Line Numbers'|t('code-highlighter'),
+    instructions: 'Show line numbers in frontend code blocks'|t('code-highlighter'),
+    id: 'lineNumbers',
+    name: 'lineNumbers',
+    value: field.lineNumbers is null ? '' : (field.lineNumbers ? '1' : '0'),
+    options: [
+        { value: '', label: 'Use Plugin Default (' ~ (settings.enableLineNumbers ? 'On' : 'Off') ~ ')' },
+        { value: '1', label: 'On'|t('code-highlighter') },
+        { value: '0', label: 'Off'|t('code-highlighter') },
+    ],
+}) }}
+
+{{ forms.selectField({
+    label: 'Copy Button'|t('code-highlighter'),
+    instructions: 'Show copy-to-clipboard button on frontend code blocks'|t('code-highlighter'),
+    id: 'showCopyButton',
+    name: 'showCopyButton',
+    value: field.showCopyButton is null ? '' : (field.showCopyButton ? '1' : '0'),
+    options: [
+        { value: '', label: 'Use Plugin Default (' ~ (settings.enableCopyButton ? 'On' : 'Off') ~ ')' },
+        { value: '1', label: 'On'|t('code-highlighter') },
+        { value: '0', label: 'Off'|t('code-highlighter') },
+    ],
+}) }}
+
+{{ forms.selectField({
+    label: 'Match Braces'|t('code-highlighter'),
+    instructions: 'Highlight matching braces, brackets, and parentheses on hover'|t('code-highlighter'),
+    id: 'matchBraces',
+    name: 'matchBraces',
+    value: field.matchBraces is null ? '' : (field.matchBraces ? '1' : '0'),
+    options: [
+        { value: '', label: 'Use Plugin Default (' ~ (settings.enableMatchBraces ? 'On' : 'Off') ~ ')' },
+        { value: '1', label: 'On'|t('code-highlighter') },
+        { value: '0', label: 'Off'|t('code-highlighter') },
+    ],
+}) }}
+
+<hr>
+<h3>{{ 'Default Content'|t('code-highlighter') }}</h3>
 
 {{ forms.textareaField({
     label: 'Default Value'|t('code-highlighter'),
@@ -89,7 +131,6 @@
     rows: 4,
     class: 'code',
 }) }}
-
 
 <hr>
 
@@ -140,8 +181,6 @@
 		var $defaultCheckbox = $wrapper.find('input[value="' + fieldDefaultLang + '"]');
 
 		if ($defaultCheckbox.length) {
-			console.log('Protecting field default language:', fieldDefaultLang);
-
 			// Add label and styling
 			$defaultCheckbox
 				.parent('label')
@@ -151,9 +190,7 @@
 
 			// Prevent unchecking with immediate re-check
 			$defaultCheckbox.on('change', function() {
-				console.log('Default checkbox change detected, checked:', this.checked);
 				if (!this.checked) {
-					console.log('Re-checking default language');
 					setTimeout(function() {
 						$defaultCheckbox.prop('checked', true);
 					}, 1);
@@ -162,7 +199,6 @@
 
 			// Handle Select All button
 			$wrapper.find('.select-all').on('change', function() {
-				console.log('Select all clicked');
 				setTimeout(function() {
 					$defaultCheckbox.prop('checked', true);
 				}, 10);

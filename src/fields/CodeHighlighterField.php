@@ -45,14 +45,26 @@ class CodeHighlighterField extends Field
     public bool $showLanguageDropdown = false;
 
     /**
-     * @var bool Enable line numbers
+     * @var bool|null Show line numbers on frontend (null = use plugin setting)
      */
-    public bool $lineNumbers = true;
+    public ?bool $lineNumbers = null;
 
     /**
      * @var bool Enable word wrapping for long lines
      */
     public bool $wordWrap = false;
+
+    /**
+     * @var bool|null Show copy button on frontend (null = use plugin setting)
+     * @since 5.4.0
+     */
+    public ?bool $showCopyButton = null;
+
+    /**
+     * @var bool|null Highlight matching braces on frontend (null = use plugin setting)
+     * @since 5.4.0
+     */
+    public ?bool $matchBraces = null;
 
     /**
      * @var int Number of rows (each row = 21px)
@@ -130,9 +142,13 @@ class CodeHighlighterField extends Field
         $rules[] = ['showLanguageDropdown', 'boolean'];
         $rules[] = ['showLanguageDropdown', 'default', 'value' => false];
         $rules[] = ['lineNumbers', 'boolean'];
-        $rules[] = ['lineNumbers', 'default', 'value' => true];
+        $rules[] = ['lineNumbers', 'default', 'value' => null];
         $rules[] = ['wordWrap', 'boolean'];
         $rules[] = ['wordWrap', 'default', 'value' => false];
+        $rules[] = ['showCopyButton', 'boolean'];
+        $rules[] = ['showCopyButton', 'default', 'value' => null];
+        $rules[] = ['matchBraces', 'boolean'];
+        $rules[] = ['matchBraces', 'default', 'value' => null];
         $rules[] = ['editorRows', 'integer', 'min' => 1, 'max' => 50];
         $rules[] = ['editorRows', 'default', 'value' => 10];
         $rules[] = ['tabWidth', 'integer', 'min' => 1, 'max' => 8];
@@ -168,6 +184,21 @@ class CodeHighlighterField extends Field
     public function getEditorHeight(): int
     {
         return $this->editorRows * 21;
+    }
+
+    /**
+     * Get the effective line numbers setting (field setting or plugin default)
+     *
+     * @since 5.4.0
+     */
+    public function getEffectiveLineNumbers(): bool
+    {
+        if ($this->lineNumbers !== null) {
+            return $this->lineNumbers;
+        }
+
+        $settings = CodeHighlighter::$plugin->getSettings();
+        return $settings->enableLineNumbers;
     }
 
     /**
@@ -217,6 +248,11 @@ class CodeHighlighterField extends Field
 
         $settings = CodeHighlighter::$plugin->getSettings();
 
+        // Normalize tri-state selects ('' → null, '1' → true, '0' → false)
+        $this->lineNumbers = $this->normalizeTriState($this->lineNumbers);
+        $this->showCopyButton = $this->normalizeTriState($this->showCopyButton);
+        $this->matchBraces = $this->normalizeTriState($this->matchBraces);
+
         // Handle Craft's "Select All" value for availableLanguages
         if (is_array($this->availableLanguages) && in_array('*', $this->availableLanguages)) {
             // Replace '*' with all available languages from plugin settings
@@ -262,6 +298,25 @@ class CodeHighlighterField extends Field
 
     protected function inputHtml(mixed $value, ?ElementInterface $element, bool $inline): string
     {
+        // Extract saved language and raw code from CodeValue
+        $savedLanguage = null;
+        if ($value instanceof CodeValue) {
+            $savedLanguage = $value->language;
+            $value = $value->code;
+        }
+
+        // Ensure it's a plain string
+        $value = (string) ($value ?? '');
+
+        // Use default value if field is empty and default value is set
+        if (empty($value) && !empty($this->defaultValue)) {
+            $value = $this->defaultValue;
+        }
+
+        // Active language: saved value takes priority, then field/plugin default
+        $effectiveLanguage = $this->getEffectiveLanguage();
+        $activeLanguage = $savedLanguage ?: $effectiveLanguage;
+
         // Register Prism core assets for CP
         $view = Craft::$app->getView();
         $view->registerAssetBundle(FieldAsset::class);
@@ -270,19 +325,14 @@ class CodeHighlighterField extends Field
         $assetManager = Craft::$app->getAssetManager();
         $languageBundle = $view->registerAssetBundle(LanguageAsset::class);
 
-        // Get effective language (field setting or plugin default)
-        $effectiveLanguage = $this->getEffectiveLanguage();
-
-        // Get language dependencies in correct order
-        $dependencies = $this->getLanguageDependencies($effectiveLanguage);
-
-        // Merge dependencies with the language itself
-        $languagesToLoad = array_merge($dependencies, [$effectiveLanguage]);
+        // Load Prism component for the active language (+ dependencies)
+        $dependencies = CodeHighlighter::$plugin->prism->getLanguageDependencies($activeLanguage);
+        $languagesToLoad = array_merge($dependencies, [$activeLanguage]);
 
         // Filter out base languages (already loaded by LanguageAsset init)
         $languagesToLoad = array_diff($languagesToLoad, LanguageAsset::BASE_LANGUAGES);
 
-        // Add remaining languages
+        // Add language files to bundle
         foreach ($languagesToLoad as $lang) {
             $filename = "prism-{$lang}.min.js";
             if (!in_array($filename, $languageBundle->js)) {
@@ -294,20 +344,6 @@ class CodeHighlighterField extends Field
         $languageBundle->init();
         $languageBundle->publish($assetManager);
 
-        // CRITICAL: Get raw string, NOT CodeValue object
-        // CodeValue is for front-end output only, not CP editing
-        if ($value instanceof CodeValue) {
-            $value = $value->code; // Direct property access, not method
-        }
-
-        // Ensure it's a plain string
-        $value = (string) ($value ?? '');
-
-        // Use default value if field is empty and default value is set
-        if (empty($value) && !empty($this->defaultValue)) {
-            $value = $this->defaultValue;
-        }
-
         $id = Html::id($this->handle);
         $namespacedId = $view->namespaceInputId($id);
 
@@ -317,57 +353,8 @@ class CodeHighlighterField extends Field
             'name' => $this->handle,
             'value' => $value,
             'field' => $this,
+            'activeLanguage' => $activeLanguage,
         ]);
-    }
-
-    /**
-     * Get dependencies for a language (recursively)
-     */
-    private function getLanguageDependencies(string $language): array
-    {
-        static $componentsData = null;
-
-        // Load components.json once
-        if ($componentsData === null) {
-            $componentsPath = Craft::getAlias('@lindemannrock/codehighlighter/web/assets/prism/js/components.json');
-            if (file_exists($componentsPath)) {
-                $componentsData = json_decode(file_get_contents($componentsPath), true);
-            } else {
-                $componentsData = [];
-            }
-        }
-
-        $dependencies = [];
-        $this->resolveDependencies($language, $componentsData, $dependencies);
-
-        return $dependencies;
-    }
-
-    /**
-     * Recursively resolve dependencies in correct load order
-     */
-    private function resolveDependencies(string $language, array $componentsData, array &$resolved): void
-    {
-        // Get language definition
-        $languageDef = $componentsData['languages'][$language] ?? null;
-
-        if ($languageDef && isset($languageDef['require'])) {
-            $requirements = is_array($languageDef['require'])
-                ? $languageDef['require']
-                : [$languageDef['require']];
-
-            // First resolve dependencies of requirements
-            foreach ($requirements as $requirement) {
-                $this->resolveDependencies($requirement, $componentsData, $resolved);
-            }
-
-            // Then add requirements if not already added
-            foreach ($requirements as $requirement) {
-                if (!in_array($requirement, $resolved, true)) {
-                    $resolved[] = $requirement;
-                }
-            }
-        }
     }
 
     public function normalizeValue(mixed $value, ?ElementInterface $element = null): mixed
@@ -381,10 +368,10 @@ class CodeHighlighterField extends Field
             return $value;
         }
 
-        // Try to decode as JSON (new format)
+        // Try to decode as JSON (new format: {"code":"...","language":"..."})
         if (is_string($value) && str_starts_with($value, '{')) {
             $decoded = json_decode($value, true);
-            if (is_array($decoded)) {
+            if (is_array($decoded) && array_key_exists('code', $decoded)) {
                 $code = $decoded['code'] ?? '';
                 $language = $decoded['language'] ?? $this->getEffectiveLanguage();
 
@@ -392,9 +379,12 @@ class CodeHighlighterField extends Field
                     (string) $code,
                     $language,
                     $this->lineNumbers,
-                    $this->wordWrap
+                    $this->wordWrap,
+                    $this->showCopyButton,
+                    $this->matchBraces,
                 );
             }
+            // Not our envelope format — fall through to plain string handling
         }
 
         // Handle new format submitted from form: array with 'code' and 'language'
@@ -406,7 +396,9 @@ class CodeHighlighterField extends Field
                 (string) $code,
                 $language,
                 $this->lineNumbers,
-                $this->wordWrap
+                $this->wordWrap,
+                $this->showCopyButton,
+                $this->matchBraces,
             );
         }
 
@@ -415,7 +407,9 @@ class CodeHighlighterField extends Field
             (string) $value,
             $this->getEffectiveLanguage(),
             $this->lineNumbers,
-            $this->wordWrap
+            $this->wordWrap,
+            $this->showCopyButton,
+            $this->matchBraces,
         );
     }
 
@@ -430,6 +424,18 @@ class CodeHighlighterField extends Field
         }
 
         return $value;
+    }
+
+    /**
+     * Normalize a tri-state value from form select ('' → null, '1' → true, '0' → false)
+     */
+    private function normalizeTriState(mixed $value): ?bool
+    {
+        if ($value === '' || $value === null) {
+            return null;
+        }
+
+        return (bool) $value;
     }
 
     protected function searchKeywords(mixed $value, ElementInterface $element): string

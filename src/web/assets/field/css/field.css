@@ -8,17 +8,19 @@
 }
 
 /* Override Craft's token styling (conflicts with Prism tokens) */
-/* Note: Craft has its own .token class that conflicts with Prism's syntax tokens */
+/* Note: Craft has its own .token class that conflicts with Prism's syntax tokens.
+   !important is needed because Prism's core CSS has high-specificity selectors like
+   .language-css .token.string { background: hsla(...) } that override our 2-class reset. */
 .prism-syntax-highlighter .token {
     display: inline;
-    border: none;
-    border-radius: 0;
-    padding: 0;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
     font-size: inherit;
     line-height: inherit;
-    text-shadow: none;
-    background: transparent;
-    box-shadow: none;
+    text-shadow: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
     /* DO NOT set color: inherit - let Prism theme colors apply! */
 }
 

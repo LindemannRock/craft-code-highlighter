@@ -92,13 +92,14 @@
 	transition: opacity 0.2s ease;
 }
 
-.code-highlighter-wrapper div.code-toolbar > .toolbar:hover {
+.code-highlighter-wrapper div.code-toolbar:hover > .toolbar {
 	opacity: 1;
 }
 
 /* Ensure wrapper doesn't break layout */
 .code-highlighter-wrapper {
 	position: relative;
+	margin-block-end: var(--code-block-spacing, 0);
 }
 
 /* Code Block - Apply typography variables */

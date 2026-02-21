@@ -57,21 +57,32 @@ class FrontendAsset extends AssetBundle
      */
     public function registerAssetFiles($view): void
     {
-        parent::registerAssetFiles($view);
-
         $settings = CodeHighlighter::$plugin->getSettings();
         $prismBundle = Craft::$app->getView()->getAssetManager()->getBundle(PrismAsset::class);
 
-        // Register toolbar CSS/JS from PrismAsset if copy button is enabled
+        // Register Prism plugins BEFORE parent (which outputs copy-button.js).
+        // copy-button.js requires Prism.plugins.toolbar to exist at execution time.
+        // Using registerJsFile without 'depends' — PrismAsset bundle is already
+        // resolved as a dependency, so its baseUrl is available.
+
+        // Toolbar (required for copy button)
         if ($settings->enableCopyButton) {
-            $view->registerCssFile(
-                $prismBundle->baseUrl . '/css/prism-toolbar.css',
-                ['depends' => [PrismAsset::class]]
-            );
-            $view->registerJsFile(
-                $prismBundle->baseUrl . '/js/prism-toolbar.min.js',
-                ['depends' => [PrismAsset::class]]
-            );
+            $view->registerCssFile($prismBundle->baseUrl . '/css/prism-toolbar.css');
+            $view->registerJsFile($prismBundle->baseUrl . '/js/prism-toolbar.min.js');
         }
+
+        // Match Braces plugin
+        if ($settings->enableMatchBraces) {
+            $view->registerCssFile($prismBundle->baseUrl . '/css/prism-match-braces.min.css');
+            $view->registerJsFile($prismBundle->baseUrl . '/js/prism-match-braces.min.js');
+        }
+
+        // Inline Color plugin CSS (JS loaded after language bundles by AssetService)
+        if ($settings->enableInlineColor) {
+            $view->registerCssFile($prismBundle->baseUrl . '/css/prism-inline-color.min.css');
+        }
+
+        // Now output bundle files (frontend.css + copy-button.js)
+        parent::registerAssetFiles($view);
     }
 }

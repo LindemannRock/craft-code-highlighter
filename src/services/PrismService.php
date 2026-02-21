@@ -39,13 +39,12 @@ class PrismService extends Component
         // Escape HTML entities in code
         $escapedCode = htmlspecialchars($code, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
-        // Build CSS classes
-        $classes = ['language-' . $language];
+        // Build CSS classes (escape language for use in class attribute)
+        $safeLanguage = htmlspecialchars($language, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $classes = ['language-' . $safeLanguage];
 
-        // Add line numbers class if specified in options
-        // Note: When outputting a field, lineNumbers comes from field settings
-        // When using manual filter, it defaults to true if not specified
-        $lineNumbers = $options['lineNumbers'] ?? true;
+        // Add line numbers class (null/unset = use plugin setting)
+        $lineNumbers = $options['lineNumbers'] ?? $settings->enableLineNumbers;
         if ($lineNumbers) {
             $classes[] = 'line-numbers';
         }
@@ -54,6 +53,12 @@ class PrismService extends Component
         $wordWrap = $options['wordWrap'] ?? false;
         if ($wordWrap) {
             $classes[] = 'wrap-lines';
+        }
+
+        // Add match braces class if enabled
+        $matchBraces = $options['matchBraces'] ?? $settings->enableMatchBraces;
+        if ($matchBraces) {
+            $classes[] = 'match-braces';
         }
 
         $classString = implode(' ', $classes);
@@ -69,21 +74,12 @@ class PrismService extends Component
 
         $wrapperClassString = implode(' ', $wrapperClasses);
 
-        // Determine font size (from options, config, or default)
+        // Only inline font-size when explicitly passed in options
+        // (CSS fallback chain in frontend.css handles defaults via --code-font-size)
         $fontSize = $options['fontSize'] ?? null;
-        if (!$fontSize) {
-            $config = Craft::$app->config->getConfigFromFile('code-highlighter');
-            $fontSize = $config['defaultFontSize'] ?? $settings->defaultFontSize;
-        }
 
-        // Determine font family (from config or settings)
-        $fontFamily = null;
-        $config = Craft::$app->config->getConfigFromFile('code-highlighter');
-        if (!empty($config['fontFamily'])) {
-            $fontFamily = $config['fontFamily'];
-        } elseif (!empty($settings->fontFamily)) {
-            $fontFamily = $settings->fontFamily;
-        }
+        // Only inline font-family when explicitly passed in options
+        $fontFamily = $options['fontFamily'] ?? null;
 
         // Build inline styles for CSS variables
         $styles = [];
@@ -91,7 +87,9 @@ class PrismService extends Component
             $styles[] = sprintf('--code-highlighter-font-size: %dpx', $fontSize);
         }
         if ($fontFamily) {
-            $styles[] = sprintf('--code-highlighter-font-family: %s', htmlspecialchars($fontFamily, ENT_QUOTES));
+            // Strip characters that could enable CSS injection
+            $safeFontFamily = preg_replace('/[{}();\\\\]/', '', $fontFamily);
+            $styles[] = sprintf('--code-highlighter-font-family: %s', htmlspecialchars($safeFontFamily, ENT_QUOTES));
         }
 
         $style = !empty($styles) ? sprintf('style="%s"', implode('; ', $styles)) : '';
@@ -113,6 +111,68 @@ class PrismService extends Component
     public function getAllLanguages(): array
     {
         $settings = CodeHighlighter::$plugin->getSettings();
+
         return $settings->getAllPrismLanguages();
+    }
+
+    /**
+     * Get dependencies for a language (recursively)
+     *
+     * @param string $language Language identifier
+     * @return string[] Ordered list of dependency language identifiers
+     */
+    public function getLanguageDependencies(string $language): array
+    {
+        static $componentsData = null;
+
+        // Load components.json once
+        if ($componentsData === null) {
+            $componentsPath = Craft::getAlias('@lindemannrock/codehighlighter/web/assets/prism/js/components.json');
+            if (file_exists($componentsPath)) {
+                $componentsData = json_decode(file_get_contents($componentsPath), true);
+            } else {
+                $componentsData = [];
+            }
+        }
+
+        $dependencies = [];
+        $visited = [];
+        $this->resolveDependencies($language, $componentsData, $dependencies, $visited);
+
+        return $dependencies;
+    }
+
+    /**
+     * Recursively resolve dependencies in correct load order
+     */
+    private function resolveDependencies(string $language, array $componentsData, array &$resolved, array &$visited): void
+    {
+        // Guard against circular dependencies
+        if (in_array($language, $visited, true)) {
+            return;
+        }
+
+        $visited[] = $language;
+
+        // Get language definition
+        $languageDef = $componentsData['languages'][$language] ?? null;
+
+        if ($languageDef && isset($languageDef['require'])) {
+            $requirements = is_array($languageDef['require'])
+                ? $languageDef['require']
+                : [$languageDef['require']];
+
+            // First resolve dependencies of requirements
+            foreach ($requirements as $requirement) {
+                $this->resolveDependencies($requirement, $componentsData, $resolved, $visited);
+            }
+
+            // Then add requirements if not already added
+            foreach ($requirements as $requirement) {
+                if (!in_array($requirement, $resolved, true)) {
+                    $resolved[] = $requirement;
+                }
+            }
+        }
     }
 }

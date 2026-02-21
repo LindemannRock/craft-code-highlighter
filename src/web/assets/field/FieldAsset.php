@@ -43,12 +43,11 @@ class FieldAsset extends AssetBundle
         ];
 
         $this->js = [
-            // bililiteRange library for contenteditable handling (MIT License)
+            // bililiteRange v4.01 (MIT License)
             'js/lib/bililiteRange.js',
-            'js/lib/bililiteRange.fancytext.js',
+            'js/lib/history.js',           // historystack — required by undo
             'js/lib/bililiteRange.undo.js',
-            'js/lib/bililiteRange.util.js',
-            'js/lib/jquery.sendkeys.js',
+            'js/lib/bililiteRange.lines.js',
 
             // Our field implementation
             "js/field{$min}.js",
@@ -66,16 +65,12 @@ class FieldAsset extends AssetBundle
 
         // Register theme CSS from the shared PrismAsset bundle
         $prismBundle = Craft::$app->getView()->getAssetManager()->getBundle(PrismAsset::class);
-        $settings = CodeHighlighter::$plugin->getSettings();
-        $theme = $settings->defaultTheme;
+        $theme = CodeHighlighter::$plugin->getSettings()->defaultTheme;
 
         // Determine theme file extension (core themes use .min.css, extended use .css)
         $coreThemes = ['default', 'dark', 'funky', 'okaidia', 'twilight', 'coy', 'solarizedlight', 'tomorrow'];
         $themeExtension = in_array($theme, $coreThemes) ? '.min.css' : '.css';
 
-        $view->registerCssFile(
-            $prismBundle->baseUrl . "/css/themes/prism-{$theme}{$themeExtension}",
-            ['depends' => [PrismAsset::class]]
-        );
+        $view->registerCssFile($prismBundle->baseUrl . "/css/themes/prism-{$theme}{$themeExtension}");
     }
 }

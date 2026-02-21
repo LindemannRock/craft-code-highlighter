@@ -1,115 +1,126 @@
 /**
  * Code Highlighter Field
- * 
- * Provides syntax-highlighted code editing in Craft CP
- * Uses bililiteRange library for contenteditable handling (MIT License)
+ *
+ * Provides syntax-highlighted code editing in Craft CP.
+ * Uses bililiteRange v4.01 for contenteditable handling (MIT License).
  * https://github.com/dwachss/bililiteRange
- * 
- * @copyright Copyright (c) 2025 LindemannRock
+ *
+ * @copyright Copyright (c) 2026 LindemannRock
  */
 
-;(function($) {
+;(function() {
     'use strict';
 
     /**
-     * Initialize Code Highlighter field
+     * Initialize a Code Highlighter field.
      *
-     * @param {Object} options - Field configuration
+     * @param {HTMLElement} fieldEl - The .code-highlighter-field container
      */
-    $.fn.codeHighlighterField = function(options) {
-        return this.each(function() {
-            var $field = $(this);
-            var $code = $field.find('code');
-            var $textarea = $field.find('textarea');
-            var element = $code[0];
+    window.initCodeHighlighterField = function(fieldEl) {
+        var codeEl = fieldEl.querySelector('code');
+        var textarea = fieldEl.querySelector('textarea');
 
-            if (!element || !$textarea.length) {
-                console.warn('Code Highlighter: Missing code or textarea element');
+        if (!codeEl || !textarea) {
+            console.warn('Code Highlighter: Missing code or textarea element');
+            return;
+        }
+
+        // Initialize bililiteRange on the contenteditable element
+        var rng = bililiteRange(codeEl);
+
+        // Enable autoindent (from lines extension)
+        rng.data.autoindent = true;
+
+        // Enable undo/redo — pass false to skip built-in key handler
+        // (it only checks ctrlKey, not metaKey, so Cmd+Z fails on macOS)
+        rng.initUndo(false);
+
+        // Syntax highlighting via Prism
+        function highlight() {
+            rng.bounds('selection');
+            // Ensure trailing newline for proper Prism rendering
+            if (!/\n$/.test(codeEl.textContent)) {
+                codeEl.textContent += '\n';
+            }
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightElement(codeEl);
+            }
+            rng.select();
+        }
+
+        // Initial highlight
+        highlight();
+
+        // Re-highlight on every input
+        rng.listen('input', highlight);
+
+        /**
+         * Sync code editor content to hidden textarea
+         */
+        function syncToTextarea() {
+            var content = rng.text();
+            textarea.value = content;
+
+            // Trigger Craft's autosave mechanism
+            textarea.dispatchEvent(new Event('input', { bubbles: true }));
+            textarea.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+
+        // Handle keyboard shortcuts
+        codeEl.addEventListener('keydown', function(e) {
+            // Tab — insert tab character
+            if (e.keyCode === 9 && !e.ctrlKey && !e.metaKey) {
+                e.preventDefault();
+                rng.sendkeys('{tab}');
                 return;
             }
 
-            // Initialize bililiteRange with Prism highlighting
-            var editor = bililiteRange.fancyText(element, function(el) {
-                if (typeof Prism !== 'undefined') {
-                    Prism.highlightElement(el);
-                    // Line numbers are automatically updated via Prism's 'complete' hook
-                }
-            });
-
-            // Enable undo/redo functionality
-            bililiteRange(editor).undo(0).data().autoindent = true;
-
-            /**
-             * Sync code editor to hidden textarea
-             */
-            function syncToTextarea() {
-                var content = bililiteRange(element).text();
-                $textarea.val(content);
-
-                // Trigger Craft's autosave mechanism
-                $textarea.trigger('input').trigger('change');
+            // Cmd/Ctrl + [ — unindent
+            if (e.keyCode === 219 && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                rng.bounds('selection').unindent();
+                return;
             }
 
-            /**
-             * Update hidden language input when changed
-             */
-            function updateLanguageInput(language) {
-                var $langInput = $field.find('.code-language-input');
-                if ($langInput.length) {
-                    $langInput.val(language);
-                }
+            // Cmd/Ctrl + ] — indent
+            if (e.keyCode === 221 && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                rng.bounds('selection').indent('\t');
+                return;
             }
 
-            // Handle keyboard shortcuts and formatting
-            $code.on('keydown', function(e) {
-                switch(e.keyCode) {
-                    // Tab - Insert tab character
-                    case 9:
-                        e.preventDefault();
-                        $code.sendkeys('\t');
-                        break;
+            // Cmd/Ctrl + Z — undo
+            if (e.keyCode === 90 && (e.ctrlKey || e.metaKey) && !e.shiftKey) {
+                e.preventDefault();
+                rng.undo();
+                return;
+            }
 
-                    // [ - Unindent with Cmd/Ctrl
-                    case 219:
-                        if (e.ctrlKey || e.metaKey) {
-                            e.preventDefault();
-                            bililiteRange(element).bounds('selection').unindent();
-                        }
-                        break;
+            // Cmd/Ctrl + Y — redo
+            if (e.keyCode === 89 && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                rng.redo();
+                return;
+            }
 
-                    // ] - Indent with Cmd/Ctrl  
-                    case 221:
-                        if (e.ctrlKey || e.metaKey) {
-                            e.preventDefault();
-                            bililiteRange(element).bounds('selection').indent('\t');
-                        }
-                        break;
-                }
-
-                // Cmd/Ctrl + Z - Undo
-                if ((e.ctrlKey || e.metaKey) && e.keyCode === 90) {
-                    e.preventDefault();
-                    bililiteRange.undo(e);
-                }
-
-                // Cmd/Ctrl + Y - Redo
-                if ((e.ctrlKey || e.metaKey) && e.keyCode === 89) {
-                    e.preventDefault();
-                    bililiteRange.redo(e);
-                }
-            });
-
-            // Sync on every keyup to keep textarea updated
-            $code.on('keyup', syncToTextarea);
-
-            // Handle paste events
-            $code.on('paste', function() {
-                setTimeout(syncToTextarea, 10);
-            });
-
-            // Initial sync
-            syncToTextarea();
+            // Cmd/Ctrl + Shift + Z — redo (macOS convention)
+            if (e.keyCode === 90 && (e.ctrlKey || e.metaKey) && e.shiftKey) {
+                e.preventDefault();
+                rng.redo();
+                return;
+            }
         });
+
+        // Sync to textarea on every keyup
+        codeEl.addEventListener('keyup', syncToTextarea);
+
+        // Sync after paste (handled by bililiteRange, but sync textarea after)
+        codeEl.addEventListener('paste', function() {
+            setTimeout(syncToTextarea, 10);
+        });
+
+        // Initial sync
+        syncToTextarea();
     };
 
-})(jQuery);
+})();

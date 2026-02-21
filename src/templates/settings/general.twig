@@ -88,6 +88,17 @@
     }) }}
 
 	{{ forms.lightswitchField({
+        label: 'Enable Line Numbers'|t('code-highlighter'),
+        instructions: 'Show line numbers in frontend code blocks by default (can be overridden per field)'|t('code-highlighter'),
+        id: 'enableLineNumbers',
+        name: 'settings[enableLineNumbers]',
+        on: settings.enableLineNumbers,
+        disabled: settings.isOverriddenByConfig('enableLineNumbers'),
+        warning: settings.isOverriddenByConfig('enableLineNumbers') ?
+            "This is being overridden by the <code>enableLineNumbers</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+    }) }}
+
+	{{ forms.lightswitchField({
         label: 'Enable Copy Button'|t('code-highlighter'),
         instructions: 'Add "Copy" button to frontend code blocks by default (can be overridden per block via render options)'|t('code-highlighter'),
         id: 'enableCopyButton',
@@ -96,6 +107,28 @@
         disabled: settings.isOverriddenByConfig('enableCopyButton'),
         warning: settings.isOverriddenByConfig('enableCopyButton') ?
             "This is being overridden by the <code>enableCopyButton</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+    }) }}
+
+	{{ forms.lightswitchField({
+        label: 'Enable Match Braces'|t('code-highlighter'),
+        instructions: 'Highlight matching brackets, braces, and parentheses on hover (can be overridden per block via render options)'|t('code-highlighter'),
+        id: 'enableMatchBraces',
+        name: 'settings[enableMatchBraces]',
+        on: settings.enableMatchBraces,
+        disabled: settings.isOverriddenByConfig('enableMatchBraces'),
+        warning: settings.isOverriddenByConfig('enableMatchBraces') ?
+            "This is being overridden by the <code>enableMatchBraces</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+    }) }}
+
+	{{ forms.lightswitchField({
+        label: 'Enable Inline Color'|t('code-highlighter'),
+        instructions: 'Show inline color previews next to CSS color values (hex, rgb, named colors). Applies to all code blocks on the page when enabled.'|t('code-highlighter'),
+        id: 'enableInlineColor',
+        name: 'settings[enableInlineColor]',
+        on: settings.enableInlineColor,
+        disabled: settings.isOverriddenByConfig('enableInlineColor'),
+        warning: settings.isOverriddenByConfig('enableInlineColor') ?
+            "This is being overridden by the <code>enableInlineColor</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
     }) }}
 
 	{% set defaultLang = settings.defaultLanguage %}

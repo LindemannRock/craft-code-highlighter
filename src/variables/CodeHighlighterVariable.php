@@ -30,7 +30,12 @@ class CodeHighlighterVariable
      */
     public function setTheme(string $theme): void
     {
-        self::$pageTheme = $theme;
+        $settings = CodeHighlighter::$plugin->getSettings();
+        $validThemes = array_keys($settings->getAvailableThemes());
+
+        if (in_array($theme, $validThemes, true)) {
+            self::$pageTheme = $theme;
+        }
     }
 
     /**
