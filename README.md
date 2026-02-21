@@ -103,6 +103,8 @@ return [
 
         // Frontend Features
         'enableCopyButton' => true,
+        'enableMatchBraces' => false,
+        'enableInlineColor' => false,
 
         // Copy Button Styling (CSS Variables)
         'copyButtonStyles' => [
@@ -140,6 +142,8 @@ return [
 - `availableLanguages` - Which languages appear in field settings
 - `fontFamily` - Custom font (leave empty for theme default)
 - `enableCopyButton` - Show copy button on frontend
+- `enableMatchBraces` - Highlight matching brackets/braces on hover
+- `enableInlineColor` - Show inline color previews for CSS color values
 - `copyButtonStyles` - CSS variable overrides for copy button
 
 **Control Panel Settings:**
@@ -156,6 +160,8 @@ You can also manage settings through the Control Panel by navigating to **Settin
 - **177+ Languages** - All Prism.js supported languages
 - **Language Switcher** - Switch languages on the fly while editing
 - **Accessible Copy Button** - Proper `<button>` elements with ARIA labels
+- **Match Braces** - Highlight matching brackets/braces on hover
+- **Inline Color** - Preview CSS color values inline
 - **Smart Asset Loading** - Only loads languages used on page
 - **Line Numbers** - Optional line number display
 - **Word Wrap** - Toggle for long lines
@@ -163,6 +169,7 @@ You can also manage settings through the Control Panel by navigating to **Settin
 - **Bundled Assets** - No CDN dependencies
 - **Lightweight** - Minimal overhead
 - **Page-Level Theming** - Control theme per template
+- **PHP Trait** - `CodeHighlighterTrait` for plugin/module integration with graceful degradation
 
 ### Themes
 
@@ -382,29 +389,35 @@ Per field (CP editor):
 Field Settings → Field Font Size → 16px - Medium
 ```
 
-Site-wide (frontend):
-```php
-'defaultFontSize' => 16,
+Site-wide (frontend via CSS):
+```css
+:root {
+    --code-font-size: 16px;
+}
 ```
 
-Per code block:
+Per code block (inline override):
 ```twig
 {{ code|highlight('php', {fontSize: 18}) }}
 ```
 
+> **Note:** The `defaultFontSize` config/setting controls the CP editor font size. Frontend code blocks use the `--code-font-size` CSS variable (default: `14px`). Passing `fontSize` as a filter/render option will still inline the value for that specific block.
+
 **Font Family:**
 
-Site-wide:
-```php
-'fontFamily' => 'JetBrains Mono, Consolas, monospace',
-```
-
-Or in your CSS:
+Site-wide (frontend via CSS):
 ```css
 :root {
     --code-font-family: 'Fira Code', 'Consolas', monospace;
 }
 ```
+
+Per code block (inline override):
+```twig
+{{ code|highlight('php', {fontFamily: 'JetBrains Mono, monospace'}) }}
+```
+
+> **Note:** The `fontFamily` config/setting controls the CP editor font. Frontend code blocks use the `--code-font-family` CSS variable (default: `monospace`).
 
 ## Template Reference
 
@@ -436,7 +449,8 @@ Two filters available (aliases):
     lineNumbers: true,      // Show line numbers
     wordWrap: false,        // Enable word wrapping
     showCopy: true,         // Show copy button
-    fontSize: 16            // Custom font size
+    fontSize: 16,           // Custom font size (inline override)
+    fontFamily: 'JetBrains Mono, monospace' // Custom font (inline override)
 }) }}
 ```
 
@@ -511,6 +525,8 @@ Navigate to **Settings → Code Highlighter**.
 - **Default Font Size** - Editor font size (8px - 24px)
 - **Font Family (Optional)** - Custom code font
 - **Enable Copy Button** - Frontend copy button toggle
+- **Enable Match Braces** - Highlight matching brackets/braces on hover
+- **Enable Inline Color** - Show inline color previews for CSS color values
 - **Available Languages** - Which languages are enabled site-wide
 
 **Config Overrides:**
@@ -610,6 +626,49 @@ All frontend styles use CSS variables for easy customization.
 ],
 ```
 
+**Code Colors (Syntax Theming):**
+
+Override Prism token colors via CSS variables. Set these on any ancestor element. Requires the "CSS Variables" theme (`'css-variables'`). Defaults match the "Tomorrow Night" palette.
+
+```css
+:root {
+    /* Block colors */
+    --code-bg: #2d2d2d;
+    --code-fg: #ccc;
+
+    /* Token colors */
+    --code-comment: #999;       /* comments, prolog, doctype, cdata */
+    --code-punctuation: #ccc;   /* punctuation */
+    --code-keyword: #cc99cd;    /* keywords, at-rules, selectors, builtins */
+    --code-string: #7ec699;     /* strings, chars, attr-values */
+    --code-number: #f08d49;     /* numbers, booleans */
+    --code-function: #f08d49;   /* functions */
+    --code-class-name: #f8c555; /* class names, constants, symbols */
+    --code-property: #f8c555;   /* properties */
+    --code-tag: #e2777a;        /* HTML tags */
+    --code-attr-name: #e2777a;  /* attribute names */
+    --code-namespace: #e2777a;  /* namespaces */
+    --code-selector: #cc99cd;   /* CSS selectors */
+    --code-operator: #67cdcc;   /* operators, entities, urls */
+    --code-variable: #7ec699;   /* variables */
+    --code-regex: #7ec699;      /* regex */
+    --code-inserted: green;     /* diff inserted */
+    --code-deleted: #e2777a;    /* diff deleted */
+}
+```
+
+**Example: Theme-Aware Code Blocks with `light-dark()`:**
+
+```css
+[data-theme="midnight"] {
+    --code-comment: light-dark(#6a737d, #8b949e);
+    --code-keyword: light-dark(#d73a49, #ff7b72);
+    --code-string: light-dark(#032f62, #a5d6ff);
+    --code-bg: light-dark(#f6f8fa, #161b22);
+    --code-fg: light-dark(#24292e, #e6edf3);
+}
+```
+
 ### Language Switcher
 
 Enable per-field language switching.
@@ -692,6 +751,65 @@ If field's Available Languages is empty:
 If field has selected languages:
 - Locked to those languages
 - Plugin changes don't affect this field
+
+### PHP Integration (CodeHighlighterTrait)
+
+For plugins or modules that need code highlighting in PHP (not Twig), use the `CodeHighlighterTrait`. It wraps the Code Highlighter API with graceful degradation — when the plugin is not installed, `highlightCode()` returns plain `<pre><code>` and data methods return empty arrays.
+
+**Setup:**
+
+```php
+use lindemannrock\codehighlighter\traits\CodeHighlighterTrait;
+
+class MyService extends Component
+{
+    use CodeHighlighterTrait;
+}
+```
+
+**Highlight Code:**
+
+```php
+// Returns highlighted HTML (or plain <pre><code> fallback)
+$html = $this->highlightCode($code, 'php');
+
+// With options
+$html = $this->highlightCode($code, 'twig', [
+    'lineNumbers' => true,
+    'wordWrap' => false,
+    'matchBraces' => true,
+    'showCopy' => true,
+    'fontSize' => 16,
+]);
+```
+
+**Theme Control:**
+
+```php
+// Set theme for current page
+$this->applyCodeTheme('dracula');
+
+// Get current theme
+$theme = $this->currentCodeTheme();
+```
+
+**Data Methods:**
+
+```php
+// Check availability
+if ($this->isCodeHighlighterAvailable()) {
+    // Plugin is installed and enabled
+}
+
+// Get all themes (handle => label)
+$themes = $this->getAvailableThemes();
+
+// Get all languages (handle => label)
+$languages = $this->getAllLanguages();
+
+// Get languages filtered by settings
+$filtered = $this->getFilteredLanguages();
+```
 
 ## Troubleshooting
 
