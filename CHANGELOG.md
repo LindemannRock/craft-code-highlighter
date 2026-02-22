@@ -1,5 +1,21 @@
 # Changelog
 
+## [5.4.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.3.1...v5.4.0) (2026-02-22)
+
+
+### Features
+
+* **prism:** add new plugins for autoloader, inline color, line numbers, match braces, and toolbar ([0260e09](https://github.com/LindemannRock/craft-code-highlighter/commit/0260e097c7e3ffcd9adf3172f3990808c1abf471))
+
+
+### Miscellaneous Chores
+
+* **.gitattributes:** add additional files to export-ignore for Packagist distribution ([97dd521](https://github.com/LindemannRock/craft-code-highlighter/commit/97dd521796983fcf4f0044b520e87df1af3091e4))
+* add .gitattributes with export-ignore for Packagist distribution ([4277cfe](https://github.com/LindemannRock/craft-code-highlighter/commit/4277cfeb69abd0ee2d4e32eae2d6505bb31dc676))
+* add .gitattributes with export-ignore for Packagist distribution ([a2bf028](https://github.com/LindemannRock/craft-code-highlighter/commit/a2bf02838c3285ec5a00ee712911bc74f08754cb))
+* **package.json:** add prismjs as a dependency ([28b6f4f](https://github.com/LindemannRock/craft-code-highlighter/commit/28b6f4f3ab2089fdf13beb05d0f9c8bf7d404b3a))
+* switch to Craft License for commercial release ([b197bcb](https://github.com/LindemannRock/craft-code-highlighter/commit/b197bcbc9693e83a98a0f11369737e992d9a749b))
+
 ## [5.3.1](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.3.0...v5.3.1) (2026-02-05)
 
 
