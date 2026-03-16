@@ -3,10 +3,12 @@
 # Update Prism.js assets from node_modules
 #
 # Usage:
-#   1. Update version in package.json: npm install prismjs@<version> --save
+#   1. Update version in src/web/assets/package.json:
+#      cd src/web/assets && npm install prismjs@<version> --save
 #   2. Run this script: bash scripts/update-prism.sh
 #
-# This copies all needed Prism files from node_modules/prismjs/ into the
+# This copies all needed Prism files from src/web/assets/node_modules/prismjs/
+# into the
 # plugin's asset directories, ensuring every file is from the same version.
 #
 
@@ -14,11 +16,11 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(dirname "$SCRIPT_DIR")"
-PRISM_SRC="$PLUGIN_DIR/node_modules/prismjs"
+PRISM_SRC="$PLUGIN_DIR/src/web/assets/node_modules/prismjs"
 PRISM_DEST="$PLUGIN_DIR/src/web/assets/prism"
 
 if [ ! -d "$PRISM_SRC" ]; then
-    echo "Error: prismjs not found in node_modules. Run 'npm install' first."
+    echo "Error: prismjs not found in src/web/assets/node_modules. Run 'cd src/web/assets && npm install' first."
     exit 1
 fi
 

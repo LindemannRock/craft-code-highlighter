@@ -13,7 +13,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_DIR="$(dirname "$SCRIPT_DIR")"
-LIB_DIR="$PLUGIN_DIR/src/web/assets/field/js/lib"
+LIB_DIR="$PLUGIN_DIR/src/web/assets/field/dist/js/lib"
 
 VERSION="4.01"
 BASE_URL="https://raw.githubusercontent.com/dwachss/bililiteRange/v${VERSION}"

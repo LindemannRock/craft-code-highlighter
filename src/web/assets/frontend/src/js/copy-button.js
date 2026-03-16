@@ -1,9 +1,9 @@
 /**
  * Code Highlighter - Accessible Copy Button
- * 
+ *
  * Adds accessible copy-to-clipboard functionality to code blocks
  * Uses proper <button> elements with ARIA labels for screen readers
- * 
+ *
  * @author LindemannRock
  * @copyright Copyright (c) 2025 LindemannRock
  */
@@ -30,10 +30,10 @@
                 textarea.style.position = 'fixed';
                 textarea.style.left = '-999999px';
                 textarea.setAttribute('aria-hidden', 'true');
-                
+
                 document.body.appendChild(textarea);
                 textarea.select();
-                
+
                 try {
                     document.execCommand('copy');
                     document.body.removeChild(textarea);
@@ -57,7 +57,7 @@
         button.type = 'button';
         button.className = 'code-copy-button';
         button.textContent = 'Copy';
-        
+
         // Accessibility attributes
         button.setAttribute('aria-label', 'Copy code to clipboard');
         button.setAttribute('data-copy-state', 'copy');

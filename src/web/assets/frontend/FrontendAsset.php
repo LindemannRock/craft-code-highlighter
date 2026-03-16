@@ -35,17 +35,14 @@ class FrontendAsset extends AssetBundle
 
         $settings = CodeHighlighter::$plugin->getSettings();
 
-        // Determine if we should use minified assets
-        $min = Craft::$app->config->general->devMode ? '' : '.min';
-
         $this->css = [
-            "css/frontend{$min}.css",
+            'dist/css/frontend.css',
         ];
 
         // Add copy button if enabled (uses our accessible implementation)
         if ($settings->enableCopyButton) {
             $this->js = [
-                "js/copy-button{$min}.js",
+                'dist/js/copy-button.js',
             ];
         }
 

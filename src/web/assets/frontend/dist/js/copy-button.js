@@ -1,9 +1,9 @@
 /**
  * Code Highlighter - Accessible Copy Button
- * 
+ *
  * Adds accessible copy-to-clipboard functionality to code blocks
  * Uses proper <button> elements with ARIA labels for screen readers
- * 
+ *
  * @author LindemannRock
  * @copyright Copyright (c) 2025 LindemannRock
  */

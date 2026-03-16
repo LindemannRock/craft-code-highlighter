@@ -35,22 +35,19 @@ class FieldAsset extends AssetBundle
             PrismAsset::class,
         ];
 
-        // Determine if we should use minified assets
-        $min = Craft::$app->config->general->devMode ? '' : '.min';
-
         $this->css = [
-            "css/field{$min}.css",
+            'dist/css/field.css',
         ];
 
         $this->js = [
             // bililiteRange v4.01 (MIT License)
-            'js/lib/bililiteRange.js',
-            'js/lib/history.js',           // historystack — required by undo
-            'js/lib/bililiteRange.undo.js',
-            'js/lib/bililiteRange.lines.js',
+            'dist/js/lib/bililiteRange.js',
+            'dist/js/lib/history.js',           // historystack — required by undo
+            'dist/js/lib/bililiteRange.undo.js',
+            'dist/js/lib/bililiteRange.lines.js',
 
             // Our field implementation
-            "js/field{$min}.js",
+            'dist/js/field.js',
         ];
 
         parent::init();

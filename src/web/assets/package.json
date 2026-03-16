@@ -1,0 +1,17 @@
+{
+  "name": "@lindemannrock/code-highlighter-assets",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "mkdir -p frontend/dist/css field/dist/css && cleancss -o frontend/dist/css/frontend.css frontend/src/css/frontend.css && cleancss -o field/dist/css/field.css field/src/css/field.css",
+    "build:js": "mkdir -p field/dist/js frontend/dist/js && terser field/src/js/field.js -o field/dist/js/field.js -c -m && terser frontend/src/js/copy-button.js -o frontend/dist/js/copy-button.js -c -m"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.3",
+    "terser": "^5.46.1"
+  },
+  "dependencies": {
+    "prismjs": "^1.29.0"
+  }
+}
