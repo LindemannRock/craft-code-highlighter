@@ -14,6 +14,14 @@
 	{{ hiddenInput('pluginHandle', 'code-highlighter') }}
 	{{ redirectInput('code-highlighter/settings') }}
 
+	{% if settings is defined and settings.hasErrors() %}
+		{{ include('lindemannrock-base/_partials/error-summary', {
+            errors: settings.getErrors(),
+            translationCategory: 'code-highlighter',
+            linkMode: 'field-id',
+        }) }}
+	{% endif %}
+
 	<h2>{{ "General"|t('code-highlighter') }}</h2>
 
 	{{ forms.textField({
@@ -26,6 +34,7 @@
         disabled: settings.isOverriddenByConfig('pluginName'),
         warning: settings.isOverriddenByConfig('pluginName') ?
             "This is being overridden by the <code>pluginName</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+        errors: settings.getErrors('pluginName'),
     }) }}
 
 	{{ forms.selectField({
@@ -38,6 +47,7 @@
         disabled: settings.isOverriddenByConfig('defaultTheme'),
         warning: settings.isOverriddenByConfig('defaultTheme') ?
             "This is being overridden by the <code>defaultTheme</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+        errors: settings.getErrors('defaultTheme'),
     }) }}
 
 	{{ forms.selectField({
@@ -50,6 +60,7 @@
         disabled: settings.isOverriddenByConfig('defaultLanguage'),
         warning: settings.isOverriddenByConfig('defaultLanguage') ?
             "This is being overridden by the <code>defaultLanguage</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw : null,
+        errors: settings.getErrors('defaultLanguage'),
     }) }}
 
 	{{ forms.selectField({
@@ -204,10 +215,6 @@
 		}
 	})();
 	{% endjs %}
-
-	<div class="buttons">
-		<button type="submit" class="btn submit">{{ "Save Settings"|t('code-highlighter') }}</button>
-	</div>
 
 	{% include 'code-highlighter/_components/plugin-credit.twig' %}
 {% endblock %}
