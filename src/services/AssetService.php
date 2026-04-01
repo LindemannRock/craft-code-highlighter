@@ -103,7 +103,6 @@ class AssetService extends Component
      * even if the global code-highlighter settings have them disabled.
      *
      * @param array $options Per-call options from highlight()
-     * @since 5.4.0
      */
     protected function registerRequestedPlugins(array $options): void
     {
