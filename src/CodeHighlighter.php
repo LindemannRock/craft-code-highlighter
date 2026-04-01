@@ -77,7 +77,16 @@ class CodeHighlighter extends Plugin
         self::$plugin = $this;
 
         // Bootstrap the base plugin helper
-        PluginHelper::bootstrap($this, 'codeHighlighterHelper');
+        PluginHelper::bootstrap($this, 'codeHighlighterHelper', [], [], [
+            'installExperience' => [
+                'headline' => Craft::t('code-highlighter', 'Code Highlighter'),
+                'body' => Craft::t('code-highlighter', 'Manage Prism.js settings and code field behavior from the plugin settings area.'),
+                'ctaLabel' => Craft::t('code-highlighter', 'Open Code Highlighter'),
+                'ctaUrl' => 'code-highlighter/settings',
+                'redirectUri' => 'code-highlighter/settings',
+                'confettiPreset' => 'surprise',
+            ],
+        ]);
 
         // Register Twig extension
         Craft::$app->view->registerTwigExtension(new CodeHighlighterTwigExtension());
