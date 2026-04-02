@@ -14,10 +14,8 @@ use Craft;
 use craft\base\Model;
 use craft\base\Plugin;
 use craft\events\RegisterComponentTypesEvent;
-use craft\events\RegisterUrlRulesEvent;
 use craft\services\Fields;
 use craft\web\twig\variables\CraftVariable;
-use craft\web\UrlManager;
 use lindemannrock\base\helpers\PluginHelper;
 use lindemannrock\codehighlighter\fields\CodeHighlighterField;
 use lindemannrock\codehighlighter\models\Settings;
@@ -57,11 +55,6 @@ class CodeHighlighter extends Plugin
     public bool $hasCpSettings = true;
 
     /**
-     * @var bool Whether the plugin settings page is accessible when allowAdminChanges is false
-     */
-    public bool $hasReadOnlyCpSettings = true;
-
-    /**
      * @var bool No CP section needed
      */
     public bool $hasCpSection = false;
@@ -87,8 +80,8 @@ class CodeHighlighter extends Plugin
                 'headline' => Craft::t('code-highlighter', 'Code Highlighter'),
                 'body' => Craft::t('code-highlighter', 'Manage Prism.js settings and code field behavior from the plugin settings area.'),
                 'ctaLabel' => Craft::t('code-highlighter', 'Open Code Highlighter'),
-                'ctaUrl' => 'code-highlighter/settings',
-                'redirectUri' => 'code-highlighter/settings',
+                'ctaUrl' => 'settings/plugins/code-highlighter',
+                'redirectUri' => 'settings/plugins/code-highlighter',
                 'confettiPreset' => 'surprise',
             ],
         ]);
@@ -118,15 +111,6 @@ class CodeHighlighter extends Plugin
             }
         );
 
-        // Register CP routes
-        Event::on(
-            UrlManager::class,
-            UrlManager::EVENT_REGISTER_CP_URL_RULES,
-            function(RegisterUrlRulesEvent $event) {
-                $event->rules['code-highlighter/settings'] = 'code-highlighter/settings/index';
-            }
-        );
-
         Craft::info('Code Highlighter plugin loaded', __METHOD__);
     }
 
@@ -135,16 +119,17 @@ class CodeHighlighter extends Plugin
         return new Settings();
     }
 
-    public function getSettingsResponse(): mixed
-    {
-        return Craft::$app->controller->redirect('code-highlighter/settings');
-    }
-
     /**
      * @inheritdoc
      */
-    public function getReadOnlySettingsResponse(): mixed
+    protected function settingsHtml(): ?string
     {
-        return Craft::$app->controller->redirect('code-highlighter/settings');
+        return Craft::$app->view->renderTemplate(
+            'code-highlighter/settings',
+            [
+                'settings' => $this->getSettings(),
+                'plugin' => $this,
+            ]
+        );
     }
 }
