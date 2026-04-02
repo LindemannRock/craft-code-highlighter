@@ -57,6 +57,11 @@ class CodeHighlighter extends Plugin
     public bool $hasCpSettings = true;
 
     /**
+     * @var bool Whether the plugin settings page is accessible when allowAdminChanges is false
+     */
+    public bool $hasReadOnlyCpSettings = true;
+
+    /**
      * @var bool No CP section needed
      */
     public bool $hasCpSection = false;
@@ -131,6 +136,14 @@ class CodeHighlighter extends Plugin
     }
 
     public function getSettingsResponse(): mixed
+    {
+        return Craft::$app->controller->redirect('code-highlighter/settings');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getReadOnlySettingsResponse(): mixed
     {
         return Craft::$app->controller->redirect('code-highlighter/settings');
     }
