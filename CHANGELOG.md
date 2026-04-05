@@ -1,5 +1,20 @@
 # Changelog
 
+## [5.5.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.4.0...v5.5.0) (2026-04-05)
+
+
+### Features
+
+* **assets:** add code highlighter with copy-to-clipboard functionality ([343a2c1](https://github.com/LindemannRock/craft-code-highlighter/commit/343a2c13869e4a1d679c2cdbec844422ee83d7ed))
+* **CodeHighlighter:** enhance plugin bootstrap with installation experience ([cc7780e](https://github.com/LindemannRock/craft-code-highlighter/commit/cc7780e59f6fc4349f7b3e8345865bfcdd6b3a63))
+* **icons:** add new SVG icons for the code highlighter plugin ([0d49492](https://github.com/LindemannRock/craft-code-highlighter/commit/0d49492cc6e7ee1fb12c7481577bceba33ac0d93))
+
+
+### Bug Fixes
+
+* settings accessibility and response methods ([68b3088](https://github.com/LindemannRock/craft-code-highlighter/commit/68b3088ec6434f62c659bcbba3b1e219e233228e))
+* **settings:** improve error handling for plugin settings form ([50cd78e](https://github.com/LindemannRock/craft-code-highlighter/commit/50cd78e8614835b9201b2a9d37416dcf7ff4e264))
+
 ## [5.4.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.3.1...v5.4.0) (2026-02-22)
 
 
