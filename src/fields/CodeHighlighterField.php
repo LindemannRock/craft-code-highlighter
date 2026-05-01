@@ -25,7 +25,7 @@ use yii\db\Schema;
  *
  * @author    LindemannRock
  * @package   CodeHighlighter
- * @since     1.0.0
+ * @since     5.0.0
  */
 class CodeHighlighterField extends Field
 {

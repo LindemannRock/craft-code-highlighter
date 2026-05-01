@@ -19,7 +19,7 @@ use craft\web\AssetBundle;
  *
  * @author    LindemannRock
  * @package   CodeHighlighter
- * @since     5.0.0
+ * @since     5.4.0
  */
 class PrismAsset extends AssetBundle
 {
