@@ -1,5 +1,18 @@
 # Changelog
 
+## [5.6.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.5.0...v5.6.0) (2026-05-06)
+
+
+### Features
+
+* add issue templates for bug reports, feature requests, and questions ([9686906](https://github.com/LindemannRock/craft-code-highlighter/commit/9686906208cdc9c3d8a32c971f72090b98222c89))
+
+
+### Bug Fixes
+
+* drop PAT requirement for release-please — use built-in GITHUB_TOKEN ([263e04d](https://github.com/LindemannRock/craft-code-highlighter/commit/263e04dd14e40c57087dcf9fd75447df88f9985e))
+* update version in docblocks for CodeHighlighterField and PrismAsset ([d0dc653](https://github.com/LindemannRock/craft-code-highlighter/commit/d0dc65379a6ed3742985daf889d122b59daf84a9))
+
 ## [5.5.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.4.0...v5.5.0) (2026-04-05)
 
 
