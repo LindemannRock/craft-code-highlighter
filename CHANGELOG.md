@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.7.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.6.0...v5.7.0) (2026-05-21)
+
+
+### Added
+
+* add pre-commit hook for ECS and PHPStan code quality checks ([3458f44](https://github.com/LindemannRock/craft-code-highlighter/commit/3458f446d95717e42f4c02fb37fcedc7b3914307))
+* **i18n:** add translation issue template for reporting language problems ([7244ac2](https://github.com/LindemannRock/craft-code-highlighter/commit/7244ac25b5b8088ce9e5691715bb289d0a136687))
+
 ## [5.6.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.5.0...v5.6.0) (2026-05-06)
 
 
