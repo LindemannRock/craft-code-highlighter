@@ -1,6 +1,6 @@
 # Changelog
 
-## [5.7.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.6.0...v5.7.0) (2026-05-21)
+## [5.7.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.6.0...v5.7.0) - 2026-05-21
 
 
 ### Added
@@ -8,7 +8,7 @@
 * add pre-commit hook for ECS and PHPStan code quality checks ([3458f44](https://github.com/LindemannRock/craft-code-highlighter/commit/3458f446d95717e42f4c02fb37fcedc7b3914307))
 * **i18n:** add translation issue template for reporting language problems ([7244ac2](https://github.com/LindemannRock/craft-code-highlighter/commit/7244ac25b5b8088ce9e5691715bb289d0a136687))
 
-## [5.6.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.5.0...v5.6.0) (2026-05-06)
+## [5.6.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.5.0...v5.6.0) - 2026-05-06
 
 
 ### Features
@@ -21,7 +21,7 @@
 * drop PAT requirement for release-please — use built-in GITHUB_TOKEN ([263e04d](https://github.com/LindemannRock/craft-code-highlighter/commit/263e04dd14e40c57087dcf9fd75447df88f9985e))
 * update version in docblocks for CodeHighlighterField and PrismAsset ([d0dc653](https://github.com/LindemannRock/craft-code-highlighter/commit/d0dc65379a6ed3742985daf889d122b59daf84a9))
 
-## [5.5.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.4.0...v5.5.0) (2026-04-05)
+## [5.5.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.4.0...v5.5.0) - 2026-04-05
 
 
 ### Features
@@ -36,7 +36,7 @@
 * settings accessibility and response methods ([68b3088](https://github.com/LindemannRock/craft-code-highlighter/commit/68b3088ec6434f62c659bcbba3b1e219e233228e))
 * **settings:** improve error handling for plugin settings form ([50cd78e](https://github.com/LindemannRock/craft-code-highlighter/commit/50cd78e8614835b9201b2a9d37416dcf7ff4e264))
 
-## [5.4.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.3.1...v5.4.0) (2026-02-22)
+## [5.4.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.3.1...v5.4.0) - 2026-02-22
 
 
 ### Features
@@ -52,7 +52,7 @@
 * **package.json:** add prismjs as a dependency ([28b6f4f](https://github.com/LindemannRock/craft-code-highlighter/commit/28b6f4f3ab2089fdf13beb05d0f9c8bf7d404b3a))
 * switch to Craft License for commercial release ([b197bcb](https://github.com/LindemannRock/craft-code-highlighter/commit/b197bcbc9693e83a98a0f11369737e992d9a749b))
 
-## [5.3.1](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.3.0...v5.3.1) (2026-02-05)
+## [5.3.1](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.3.0...v5.3.1) - 2026-02-05
 
 
 ### Bug Fixes
@@ -64,14 +64,14 @@
 
 * **package.json:** update package name and add author ([d7de6ef](https://github.com/LindemannRock/craft-code-highlighter/commit/d7de6ef9728f865697496c9ccd0b69198b346175))
 
-## [5.3.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.2.0...v5.3.0) (2026-01-07)
+## [5.3.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.2.0...v5.3.0) - 2026-01-07
 
 
 ### Features
 
 * migrate to shared base plugin ([04deede](https://github.com/LindemannRock/craft-code-highlighter/commit/04deede37753a9ea661f93875fef2f30b5c96b12))
 
-## [5.2.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.1.0...v5.2.0) (2025-12-04)
+## [5.2.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.1.0...v5.2.0) - 2025-12-04
 
 
 ### Features
@@ -85,7 +85,7 @@
 
 * update [@since](https://github.com/since) annotations to 5.0.0 for various classes and files ([31ab13e](https://github.com/LindemannRock/craft-code-highlighter/commit/31ab13eae910596f63066781d2d7e3faa0854924))
 
-## [5.1.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.0.0...v5.1.0) (2025-11-14)
+## [5.1.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.0.0...v5.1.0) - 2025-11-14
 
 
 ### Features
@@ -98,7 +98,7 @@
 * add MIT License file ([7a0bc32](https://github.com/LindemannRock/craft-code-highlighter/commit/7a0bc32f68f547a487d7c1c95806216d8c8ec4a4))
 * update .gitignore to include additional files and directories ([13fb793](https://github.com/LindemannRock/craft-code-highlighter/commit/13fb793aba63fdd23bb38b57fdc1b6f51d5af026))
 
-## 5.0.0 (2025-11-01)
+## 5.0.0 - 2025-11-01
 
 
 ### Features
