@@ -1,7 +1,6 @@
 # Exclude dev/build files from Packagist distribution
 ecs.php export-ignore
 phpstan.neon export-ignore
-scripts/ export-ignore
 
 # Field and frontend assets: only dist/ and Prism vendor files are needed
 src/web/assets/field/src/ export-ignore
@@ -20,3 +19,4 @@ release-please-config.json export-ignore
 # GitHub/dev tooling
 .github/ export-ignore
 .githooks/ export-ignore
+scripts/ export-ignore
