@@ -10,6 +10,7 @@ namespace lindemannrock\codehighlighter\models;
 
 use Craft;
 use craft\base\Model;
+use lindemannrock\base\traits\PluginNameSettingsTrait;
 use lindemannrock\base\traits\SettingsConfigTrait;
 use lindemannrock\base\traits\SettingsDisplayNameTrait;
 
@@ -20,6 +21,7 @@ use lindemannrock\base\traits\SettingsDisplayNameTrait;
  */
 class Settings extends Model
 {
+    use PluginNameSettingsTrait;
     use SettingsConfigTrait;
     use SettingsDisplayNameTrait;
     /**
@@ -113,9 +115,8 @@ class Settings extends Model
 
     protected function defineRules(): array
     {
-        return [
-            [['pluginName'], 'required'],
-            [['pluginName', 'defaultLanguage', 'fontFamily'], 'string', 'max' => 255],
+        return array_merge([
+            [['defaultLanguage', 'fontFamily'], 'string', 'max' => 255],
             [['defaultTheme'], 'in', 'range' => array_keys($this->getAvailableThemes())],
             [['defaultLanguage'], 'in', 'range' => array_keys($this->getAllPrismLanguages())],
             [['enableLineNumbers', 'enableCopyButton', 'enableMatchBraces', 'enableInlineColor'], 'boolean'],
@@ -124,7 +125,18 @@ class Settings extends Model
             [['defaultFontSize'], 'integer', 'min' => 8, 'max' => 32],
             [['defaultFontSize'], 'default', 'value' => 14],
             [['fontFamily'], 'default', 'value' => ''],
-        ];
+        ], $this->pluginNameSettingsRules());
+    }
+
+    /**
+     * Attribute labels for validation error messages.
+     *
+     * Trait helper merges in `pluginName` — translated via `lindemannrock-base`.
+     * Other properties fall through to Yii's auto-generated English labels.
+     */
+    public function attributeLabels(): array
+    {
+        return $this->pluginNameSettingsLabel();
     }
 
     /**
