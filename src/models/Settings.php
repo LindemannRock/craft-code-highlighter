@@ -128,15 +128,19 @@ class Settings extends Model
         ], $this->pluginNameSettingsRules());
     }
 
-    /**
-     * Attribute labels for validation error messages.
-     *
-     * Trait helper merges in `pluginName` — translated via `lindemannrock-base`.
-     * Other properties fall through to Yii's auto-generated English labels.
-     */
     public function attributeLabels(): array
     {
-        return $this->pluginNameSettingsLabel();
+        return array_merge([
+            'defaultTheme' => Craft::t('code-highlighter', 'Theme'),
+            'defaultLanguage' => Craft::t('code-highlighter', 'Default Language'),
+            'defaultFontSize' => Craft::t('code-highlighter', 'Default Font Size'),
+            'fontFamily' => Craft::t('code-highlighter', 'Font Family (Optional)'),
+            'enableLineNumbers' => Craft::t('code-highlighter', 'Enable Line Numbers'),
+            'enableCopyButton' => Craft::t('code-highlighter', 'Enable Copy Button'),
+            'enableMatchBraces' => Craft::t('code-highlighter', 'Enable Match Braces'),
+            'enableInlineColor' => Craft::t('code-highlighter', 'Enable Inline Color'),
+            'availableLanguages' => Craft::t('code-highlighter', 'Available Languages'),
+        ], $this->pluginNameSettingsLabel());
     }
 
     /**
