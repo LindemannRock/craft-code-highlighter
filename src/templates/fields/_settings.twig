@@ -8,7 +8,7 @@
     id: 'language',
     name: 'language',
     value: field.language,
-    options: [{value: '', label: 'Use Plugin Default (' ~ settings.defaultLanguage|upper ~ ')'}]|merge(field.getAvailableLanguagesForField()),
+    options: [{value: '', label: 'Use Plugin Default ({value})'|t('code-highlighter', {value: settings.defaultLanguage|upper})}]|merge(field.getAvailableLanguagesForField()),
     errors: field.getErrors('language'),
 }) }}
 
@@ -56,15 +56,15 @@
     name: 'fontSize',
     value: field.fontSize,
     options: [
-        { value: 0, label: 'Use Plugin Default (' ~ settings.defaultFontSize ~ 'px)' },
-        { value: 8, label: '8px - Tiny' },
-        { value: 10, label: '10px - Very Small' },
-        { value: 12, label: '12px - Small' },
-        { value: 14, label: '14px - Normal' },
-        { value: 16, label: '16px - Medium' },
-        { value: 18, label: '18px - Large' },
-        { value: 20, label: '20px - Very Large' },
-        { value: 24, label: '24px - Huge' },
+        { value: 0, label: 'Use Plugin Default ({value})'|t('code-highlighter', {value: settings.defaultFontSize ~ 'px'}) },
+        { value: 8, label: '8px - Tiny'|t('code-highlighter') },
+        { value: 10, label: '10px - Very Small'|t('code-highlighter') },
+        { value: 12, label: '12px - Small'|t('code-highlighter') },
+        { value: 14, label: '14px - Normal'|t('code-highlighter') },
+        { value: 16, label: '16px - Medium'|t('code-highlighter') },
+        { value: 18, label: '18px - Large'|t('code-highlighter') },
+        { value: 20, label: '20px - Very Large'|t('code-highlighter') },
+        { value: 24, label: '24px - Huge'|t('code-highlighter') },
     ],
     errors: field.getErrors('fontSize'),
 }) }}
@@ -87,7 +87,7 @@
     name: 'lineNumbers',
     value: field.lineNumbers is null ? '' : (field.lineNumbers ? '1' : '0'),
     options: [
-        { value: '', label: 'Use Plugin Default (' ~ (settings.enableLineNumbers ? 'On' : 'Off') ~ ')' },
+        { value: '', label: 'Use Plugin Default ({value})'|t('code-highlighter', {value: settings.enableLineNumbers ? 'On'|t('code-highlighter') : 'Off'|t('code-highlighter')}) },
         { value: '1', label: 'On'|t('code-highlighter') },
         { value: '0', label: 'Off'|t('code-highlighter') },
     ],
@@ -100,7 +100,7 @@
     name: 'showCopyButton',
     value: field.showCopyButton is null ? '' : (field.showCopyButton ? '1' : '0'),
     options: [
-        { value: '', label: 'Use Plugin Default (' ~ (settings.enableCopyButton ? 'On' : 'Off') ~ ')' },
+        { value: '', label: 'Use Plugin Default ({value})'|t('code-highlighter', {value: settings.enableCopyButton ? 'On'|t('code-highlighter') : 'Off'|t('code-highlighter')}) },
         { value: '1', label: 'On'|t('code-highlighter') },
         { value: '0', label: 'Off'|t('code-highlighter') },
     ],
@@ -113,7 +113,7 @@
     name: 'matchBraces',
     value: field.matchBraces is null ? '' : (field.matchBraces ? '1' : '0'),
     options: [
-        { value: '', label: 'Use Plugin Default (' ~ (settings.enableMatchBraces ? 'On' : 'Off') ~ ')' },
+        { value: '', label: 'Use Plugin Default ({value})'|t('code-highlighter', {value: settings.enableMatchBraces ? 'On'|t('code-highlighter') : 'Off'|t('code-highlighter')}) },
         { value: '1', label: 'On'|t('code-highlighter') },
         { value: '0', label: 'Off'|t('code-highlighter') },
     ],
