@@ -138,7 +138,7 @@ return [
 - `pluginName` - Plugin name in Control Panel menu
 - `defaultTheme` - Prism theme (24 themes available)
 - `defaultLanguage` - Default language for new fields
-- `defaultFontSize` - Font size in pixels (8-32)
+- `defaultFontSize` - Font size in pixels (8-24)
 - `availableLanguages` - Which languages appear in field settings
 - `fontFamily` - Custom font (leave empty for theme default)
 - `enableCopyButton` - Show copy button on frontend

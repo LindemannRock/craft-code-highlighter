@@ -10,6 +10,7 @@ namespace lindemannrock\codehighlighter\models;
 
 use Craft;
 use craft\base\Model;
+use lindemannrock\base\helpers\SettingsPostHelper;
 use lindemannrock\base\traits\PluginNameSettingsTrait;
 use lindemannrock\base\traits\SettingsConfigTrait;
 use lindemannrock\base\traits\SettingsDisplayNameTrait;
@@ -24,6 +25,11 @@ class Settings extends Model
     use PluginNameSettingsTrait;
     use SettingsConfigTrait;
     use SettingsDisplayNameTrait;
+
+    /**
+     * @var array<string, array<int, string>>
+     */
+    private array $settingsPostErrors = [];
     /**
      * @var string Plugin display name
      */
@@ -84,6 +90,30 @@ class Settings extends Model
     public array $copyButtonStyles = [];
 
     /**
+     * @inheritdoc
+     */
+    public function setAttributes($values, $safeOnly = true): void
+    {
+        if (!is_array($values)) {
+            parent::setAttributes($values, $safeOnly);
+            return;
+        }
+
+        $this->settingsPostErrors = [];
+
+        $result = SettingsPostHelper::apply(
+            model: $this,
+            postedValues: $values,
+            allowedAttributes: $this->settingsPostAttributes(),
+            isOverridden: fn(string $attribute): bool => $this->isOverriddenByConfig($attribute),
+        );
+
+        if ($result->hasErrors) {
+            $this->settingsPostErrors = $this->getErrors();
+        }
+    }
+
+    /**
      * Backward compatibility setter
      */
     public function __set($name, $value)
@@ -105,6 +135,17 @@ class Settings extends Model
             return false;
         }
 
+        if ($this->settingsPostErrors !== []) {
+            foreach ($this->settingsPostErrors as $attribute => $errors) {
+                foreach ($errors as $error) {
+                    $this->addError($attribute, $error);
+                }
+            }
+
+            $this->settingsPostErrors = [];
+            return false;
+        }
+
         // Handle Craft's "Select All" value for availableLanguages
         if (is_array($this->availableLanguages) && in_array('*', $this->availableLanguages)) {
             $this->availableLanguages = array_keys($this->getAllPrismLanguages());
@@ -122,7 +163,7 @@ class Settings extends Model
             [['enableLineNumbers', 'enableCopyButton', 'enableMatchBraces', 'enableInlineColor'], 'boolean'],
             [['availableLanguages'], 'safe'],
             [['availableLanguages'], 'validateAvailableLanguages'],
-            [['defaultFontSize'], 'integer', 'min' => 8, 'max' => 32],
+            [['defaultFontSize'], 'integer', 'min' => 8, 'max' => 24],
             [['defaultFontSize'], 'default', 'value' => 14],
             [['fontFamily'], 'default', 'value' => ''],
         ], $this->pluginNameSettingsRules());
@@ -173,6 +214,26 @@ class Settings extends Model
     protected static function pluginHandle(): string
     {
         return 'code-highlighter';
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function settingsPostAttributes(): array
+    {
+        return [
+            'pluginName',
+            'defaultTheme',
+            'defaultLanguage',
+            'availableLanguages',
+            'defaultFontSize',
+            'fontFamily',
+            'enableLineNumbers',
+            'enableCopyButton',
+            'enableMatchBraces',
+            'enableInlineColor',
+            'copyButtonStyles',
+        ];
     }
 
     /**

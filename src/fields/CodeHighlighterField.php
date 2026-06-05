@@ -153,7 +153,7 @@ class CodeHighlighterField extends Field
         $rules[] = ['editorRows', 'default', 'value' => 10];
         $rules[] = ['tabWidth', 'integer', 'min' => 1, 'max' => 8];
         $rules[] = ['tabWidth', 'default', 'value' => 4];
-        $rules[] = ['fontSize', 'integer', 'min' => 0, 'max' => 32];
+        $rules[] = ['fontSize', 'integer', 'min' => 0, 'max' => 24];
         $rules[] = ['fontSize', 'default', 'value' => 0];
         $rules[] = ['defaultValue', 'string'];
 
