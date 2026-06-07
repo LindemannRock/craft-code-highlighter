@@ -1,5 +1,18 @@
 # Changelog
 
+## [5.8.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.7.0...v5.8.0) (2026-06-07)
+
+
+### Added
+
+* add static analysis script for CI workflow ([89a8deb](https://github.com/LindemannRock/craft-code-highlighter/commit/89a8debe4f3dbc3ab4364b5e8b1bf33ea27163e1))
+* **i18n:** add new translation keys for all 12 languages ([5ce0e58](https://github.com/LindemannRock/craft-code-highlighter/commit/5ce0e58b208e67322239dc84e7e1a787f682ba73))
+* **i18n:** add new translation keys for font sizes and plugin defaults ([bc31178](https://github.com/LindemannRock/craft-code-highlighter/commit/bc311782af2b2bb69e0aa15a45aa1bccd64b4db1))
+* **i18n:** add new translation keys for plugin settings ([24ab2e0](https://github.com/LindemannRock/craft-code-highlighter/commit/24ab2e095d28ee001a86673e7b869e8709b3ac16))
+* **i18n:** add translation keys for default font size options ([b22657f](https://github.com/LindemannRock/craft-code-highlighter/commit/b22657fde4c3030b2e687fdfdcd6f2607488abee))
+* **i18n:** add translation keys for default language and font size options ([1f86a35](https://github.com/LindemannRock/craft-code-highlighter/commit/1f86a35634805e791d3fd161efb279bb94ab3492))
+* **settings:** add settings post error handling in setAttributes method ([6d485a2](https://github.com/LindemannRock/craft-code-highlighter/commit/6d485a227255eb7832e57650d62391f4954aead5))
+
 ## [5.7.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.6.0...v5.7.0) - 2026-05-21
 
 
