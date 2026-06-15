@@ -1,0 +1,13 @@
+{
+    "generated": [
+        "get-started/configuration.md",
+        "developers/template-variables.md",
+        "developers/twig-globals.md",
+        "developers/shared-features.md"
+    ],
+    "manual": [
+        "get-started/installation.md",
+        "get-started/requirements.md"
+    ],
+    "lastGenerated": "2026-06-15T17:19:28+03:00"
+}

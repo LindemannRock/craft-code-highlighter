@@ -1,0 +1,7 @@
+{
+    "plugin": {
+        "name": "Code Highlighter",
+        "handle": "code-highlighter",
+        "description": "A syntax-highlighting Code field for Craft, powered by Prism.js — ~177 languages and 25 themes, bundled and served locally."
+    }
+}
