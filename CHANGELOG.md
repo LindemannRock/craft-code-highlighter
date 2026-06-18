@@ -1,5 +1,14 @@
 # Changelog
 
+## [5.8.1](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.8.0...v5.8.1) (2026-06-18)
+
+
+### Fixed
+
+* **i18n:** correct Portuguese translation for custom font family description ([6fa1532](https://github.com/LindemannRock/craft-code-highlighter/commit/6fa1532388e62cb71f502a1a870682df01ecf162))
+* **i18n:** correct Swedish translations for code highlighter settings ([e8b8853](https://github.com/LindemannRock/craft-code-highlighter/commit/e8b8853c3f54ad64d39219ed956d10591628c0e3))
+* **settings:** replace inline warning with config override component ([9ffa3f8](https://github.com/LindemannRock/craft-code-highlighter/commit/9ffa3f87bd17b92f668c485a34120ca38a45e70d))
+
 ## [5.8.0](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.7.0...v5.8.0) - 2026-06-07
 
 

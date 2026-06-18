@@ -2,7 +2,7 @@
 	"name": "lindemannrock/craft-code-highlighter",
 	"description": "Lightweight syntax highlighting for Craft CMS using Prism.js",
 	"type": "craft-plugin",
-	"version": "5.8.0",
+	"version": "5.8.1",
 	"keywords": [
 		"craft",
 		"cms",
