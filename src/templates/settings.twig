@@ -143,7 +143,9 @@
     </div>
 
     {% if settings.isOverriddenByConfig('availableLanguages') %}
-        <p class="warning">{{ "This is being overridden by the <code>availableLanguages</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')|raw }}</p>
+        {% include 'lindemannrock-base/_components/config-override-warning' with {
+            message: "This is being overridden by the <code>availableLanguages</code> setting in <code>config/code-highlighter.php</code>."|t('code-highlighter')
+        } only %}
     {% endif %}
 
     {% if settings.getErrors('availableLanguages') %}
