@@ -29,7 +29,7 @@ return [
     '20px - Very Large' => '20px - Muito grande',
     '24px - Huge' => '24px - Enorme',
     'Font Family (Optional)' => 'Família de tipos de letra (Opcional)',
-    'Custom font family for code blocks (leave empty to use theme default)' => 'Família de tipos de letra personalizada para blocos de código (deixar vazio para usar o padrão do tema)',
+    'Custom font family for code blocks (leave empty to use theme default)' => 'Família de tipos de letra personalizada para blocos de código (deixar vazio para usar a predefinição do tema)',
     'e.g., JetBrains Mono, Fira Code, monospace' => 'p. ex., JetBrains Mono, Fira Code, monospace',
     'Enable Line Numbers' => 'Ativar números de linha',
     'Show line numbers in frontend code blocks by default (can be overridden per field)' => 'Mostrar números de linha nos blocos de código do frontend por predefinição (pode ser substituído por campo)',
