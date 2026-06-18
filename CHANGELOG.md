@@ -1,6 +1,6 @@
 # Changelog
 
-## [5.8.1](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.8.0...v5.8.1) (2026-06-18)
+## [5.8.1](https://github.com/LindemannRock/craft-code-highlighter/compare/v5.8.0...v5.8.1) - 2026-06-18
 
 
 ### Fixed
